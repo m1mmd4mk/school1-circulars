@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نظام التعاميم الإلكترونية</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f0f4f8;--card:#fff;--primary:#1a4b8c;--primary-light:#2d6fcc;
+  --accent:#e8a020;--success:#2e7d52;--success-bg:#e8f5ee;
+  --danger:#c0392b;--danger-bg:#fdecea;--text:#1a2332;--muted:#6b7a8d;
+  --border:#d1dbe8;--radius:12px;--shadow:0 2px 12px rgba(0,0,0,.08)
+}
+body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+/* LOGIN */
+#loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+.login-box{background:white;border-radius:20px;padding:40px 32px;width:100%;max-width:380px;box-shadow:0 8px 32px rgba(0,0,0,.12);text-align:center}
+.login-box .logo{font-size:56px;margin-bottom:12px}
+.login-box h1{font-size:22px;font-weight:800;color:var(--primary);margin-bottom:6px}
+.login-box p{color:var(--muted);font-size:14px;margin-bottom:28px}
+.login-tabs{display:flex;gap:8px;margin-bottom:24px;background:#f0f4f8;border-radius:10px;padding:4px}
+.login-tab{flex:1;padding:10px;border:none;background:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;color:var(--muted);font-family:inherit;transition:.2s}
+.login-tab.active{background:white;color:var(--primary);box-shadow:0 2px 8px rgba(0,0,0,.08)}
+/* HEADER */
+header{background:var(--primary);color:white;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+header .left{display:flex;align-items:center;gap:10px}
+header h1{font-size:18px;font-weight:700}
+header p{font-size:12px;opacity:.8}
+.logout-btn{background:rgba(255,255,255,.2);border:none;color:white;padding:7px 14px;border-radius:8px;cursor:pointer;font-size:13px;font-family:inherit;font-weight:600}
+/* TABS */
+.tabs{display:flex;background:white;border-bottom:2px solid var(--border);padding:0 12px;gap:2px;overflow-x:auto}
+.tab-btn{padding:13px 16px;border:none;background:none;font-size:14px;font-family:inherit;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;font-weight:500;transition:.2s}
+.tab-btn.active{color:var(--primary);border-bottom-color:var(--primary)}
+/* PAGES */
+.page{display:none;padding:16px;max-width:700px;margin:0 auto}
+.page.active{display:block}
+/* CARD */
+.card{background:var(--card);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
+.card h2{font-size:16px;font-weight:700;margin-bottom:14px;color:var(--primary);display:flex;align-items:center;gap:7px}
+/* INPUTS */
+label{display:block;font-size:13px;font-weight:600;margin-bottom:5px;color:var(--text)}
+input[type=text],input[type=password],input[type=date],textarea,select{width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:8px;font-size:15px;font-family:inherit;color:var(--text);background:white;margin-bottom:12px;direction:rtl;transition:.2s}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--primary-light)}
+textarea{resize:vertical;min-height:90px}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 20px;border:none;border-radius:8px;font-size:14px;font-family:inherit;font-weight:600;cursor:pointer;transition:.2s}
+.btn-primary{background:var(--primary);color:white}
+.btn-primary:hover{background:var(--primary-light)}
+.btn-success{background:var(--success);color:white}
+.btn-success:hover{background:#25a060}
+.btn-danger{background:var(--danger);color:white;font-size:12px;padding:6px 12px}
+.btn-outline{background:white;color:var(--primary);border:1.5px solid var(--primary)}
+.btn-full{width:100%;justify-content:center}
+/* CHIPS */
+.staff-chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
+.chip{padding:6px 13px;border-radius:20px;font-size:13px;font-weight:600;border:1.5px solid var(--border);background:white;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:5px}
+.chip.selected{background:var(--primary);color:white;border-color:var(--primary)}
+/* PROGRESS */
+.progress-bar-wrap{background:var(--border);border-radius:10px;height:7px;margin-top:6px;overflow:hidden}
+.progress-bar{height:100%;background:var(--success);border-radius:10px;transition:width .4s}
+/* BADGES */
+.alert{padding:11px 14px;border-radius:8px;font-size:14px;margin-bottom:12px;font-weight:500}
+.alert-success{background:var(--success-bg);color:var(--success)}
+.alert-info{background:#e8f0fe;color:var(--primary)}
+.alert-warn{background:#fff8e1;color:#b45309}
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:center;justify-content:center;padding:16px}
+.modal-overlay.open{display:flex}
+.modal{background:white;border-radius:16px;padding:22px;width:100%;max-width:460px;max-height:90vh;overflow-y:auto}
+.modal h3{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--primary)}
+/* CIRCULAR TEXT */
+.circular-text{background:#f8fafc;border-radius:8px;padding:13px;font-size:14px;line-height:1.8;color:var(--text);margin-bottom:14px;border:1px solid var(--border);white-space:pre-wrap}
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:36px 20px;color:var(--muted)}
+.empty-state .emoji{font-size:44px;margin-bottom:10px}
+/* STAFF ROW */
+.staff-row{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:#f8fafc;border-radius:8px;margin-bottom:6px}
+/* LOADING */
+.spinner{display:inline-block;width:20px;height:20px;border:3px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-overlay{display:none;position:fixed;inset:0;background:rgba(255,255,255,.8);z-index:200;align-items:center;justify-content:center;flex-direction:column;gap:12px}
+.loading-overlay.show{display:flex}
+.loading-overlay p{color:var(--primary);font-weight:600}
+/* CONFIRM CHECK */
+.confirm-check-wrap{display:flex;align-items:center;gap:12px;background:#f0f7f4;border:2px solid var(--success);border-radius:12px;padding:16px;margin-bottom:14px;cursor:pointer}
+.big-checkbox{width:28px;height:28px;border:2.5px solid var(--success);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;background:white;transition:.2s}
+.big-checkbox.checked{background:var(--success);color:white}
+.confirm-check-wrap p{font-size:15px;font-weight:600;color:var(--text);line-height:1.5}
+@media(max-width:500px){header h1{font-size:15px}.tab-btn{padding:11px 12px;font-size:13px}}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div style="width:40px;height:40px;border:4px solid #ddd;border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite"></div>
+  <p id="loadingMsg">جاري التحميل...</p>
+</div>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="logo">📋</div>
+    <h1>نظام التعاميم</h1>
+    <p>المدرسة — التعاميم الإلكترونية</p>
+    <div class="login-tabs">
+      <button class="login-tab active" onclick="switchLoginTab('staff')">👩‍🏫 معلم / إداري</button>
+      <button class="login-tab" onclick="switchLoginTab('admin')">🏫 المدير</button>
+    </div>
+    <div id="staffLoginDiv">
+      <label>اختر اسمك</label>
+      <select id="staffLoginSelect" style="margin-bottom:16px">
+        <option value="">-- اختر اسمك --</option>
+      </select>
+      <button class="btn btn-primary btn-full" onclick="loginAsStaff()">دخول</button>
+    </div>
+    <div id="adminLoginDiv" style="display:none">
+      <label>كلمة السر</label>
+      <input type="password" id="adminPassInput" placeholder="أدخل كلمة السر" onkeydown="if(event.key==='Enter')loginAsAdmin()">
+      <button class="btn btn-primary btn-full" onclick="loginAsAdmin()">دخول كمدير</button>
+      <p id="adminErr" style="color:var(--danger);font-size:13px;margin-top:8px;display:none">كلمة السر غير صحيحة</p>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="mainApp" style="display:none">
+  <header>
+    <div class="left">
+      <span style="font-size:24px">📋</span>
+      <div>
+        <h1>نظام التعاميم الإلكترونية</h1>
+        <p id="headerUser"></p>
+      </div>
+    </div>
+    <button class="logout-btn" onclick="logout()">خروج</button>
+  </header>
+
+  <div class="tabs" id="mainTabs">
+    <!-- tabs injected by JS -->
+  </div>
+
+  <!-- ADMIN: إضافة تعميم -->
+  <div id="page-add" class="page">
+    <div class="card">
+      <h2>➕ تعميم جديد</h2>
+      <label>عنوان التعميم</label>
+      <input type="text" id="circTitle" placeholder="مثال: اجتماع المعلمين">
+      <label>تاريخ التعميم</label>
+      <input type="date" id="circDate">
+      <label>نص التعميم</label>
+      <textarea id="circBody" placeholder="اكتب نص التعميم هنا..."></textarea>
+      <label>المطلوب منهم الاطلاع</label>
+      <div style="display:flex;gap:8px;margin-bottom:8px">
+        <button class="btn btn-outline" style="font-size:12px;padding:6px 12px" onclick="selectAllChips()">تحديد الكل</button>
+        <button class="btn btn-outline" style="font-size:12px;padding:6px 12px" onclick="clearAllChips()">إلغاء الكل</button>
+      </div>
+      <div class="staff-chips" id="staffChips"></div>
+      <button class="btn btn-primary btn-full" onclick="addCircular()">📤 نشر التعميم</button>
+    </div>
+  </div>
+
+  <!-- ADMIN: إدارة الكوادر -->
+  <div id="page-staff-mgmt" class="page">
+    <div class="card">
+      <h2>👥 إدارة الكوادر</h2>
+      <div style="display:flex;gap:8px;margin-bottom:12px">
+        <input type="text" id="newStaffName" placeholder="اسم المعلم أو الإداري" style="margin:0;flex:1">
+        <button class="btn btn-primary" onclick="addStaff()">+ إضافة</button>
+      </div>
+      <div id="staffListAdmin"></div>
+    </div>
+    <div class="card" style="border-right:4px solid var(--danger)">
+      <h2>🔑 تغيير كلمة سر المدير</h2>
+      <label>كلمة السر الجديدة</label>
+      <input type="password" id="newPassInput" placeholder="كلمة السر الجديدة">
+      <button class="btn btn-primary" onclick="changePassword()">حفظ كلمة السر</button>
+    </div>
+  </div>
+
+  <!-- ADMIN: التعاميم -->
+  <div id="page-circulars" class="page">
+    <div id="adminCircularsList"></div>
+  </div>
+
+  <!-- ADMIN: التقارير -->
+  <div id="page-reports" class="page">
+    <div id="reportContent"></div>
+  </div>
+
+  <!-- STAFF: تعاميمي -->
+  <div id="page-my-circulars" class="page">
+    <div id="myCircularsList"></div>
+  </div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal">
+    <h3 id="confirmModalTitle">📋</h3>
+    <div class="circular-text" id="confirmModalBody"></div>
+    <div class="confirm-check-wrap" id="confirmCheckWrap" onclick="toggleConfirmCheck()">
+      <div class="big-checkbox" id="confirmCheckbox">✓</div>
+      <p>أؤكد اطلاعي على هذا التعميم وموافقتي على محتواه</p>
+    </div>
+    <button class="btn btn-success btn-full" id="confirmSubmitBtn" onclick="submitAcknowledge()" disabled style="opacity:.5">
+      ✅ تأكيد الاطلاع
+    </button>
+    <button class="btn btn-outline btn-full" style="margin-top:8px" onclick="closeConfirmModal()">إغلاق</button>
+  </div>
+</div>
+
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDif0Igo3ZZnLHjXpv97aQCUgXXZLZOscg",
+  authDomain: "school-a380e.firebaseapp.com",
+  projectId: "school-a380e",
+  storageBucket: "school-a380e.firebasestorage.app",
+  messagingSenderId: "851640580281",
+  appId: "1:851640580281:web:7de4dac2a2c9fa06b34368"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// ===================== STATE =====================
+let currentUser = null; // {name, role: 'admin'|'staff'}
+let staffList = [];
+let circulars = [];
+let confirmTarget = null; // {circularId}
+let confirmChecked = false;
+
+// ===================== LOADING =====================
+function showLoading(msg='جاري التحميل...'){
+  document.getElementById('loadingMsg').textContent=msg;
+  document.getElementById('loadingOverlay').classList.add('show');
+}
+function hideLoading(){ document.getElementById('loadingOverlay').classList.remove('show'); }
+
+// ===================== INIT =====================
+async function init() {
+  showLoading('جاري الاتصال...');
+  try {
+    // Load staff
+    const staffSnap = await getDocs(collection(db,'staff'));
+    staffList = staffSnap.docs.map(d=>({id:d.id,...d.data()}));
+    // Populate staff login select
+    const sel = document.getElementById('staffLoginSelect');
+    sel.innerHTML = '<option value="">-- اختر اسمك --</option>';
+    staffList.forEach(s=>{
+      sel.innerHTML += `<option value="${s.name}">${s.name}</option>`;
+    });
+    // Ensure default password exists
+    const cfgRef = doc(db,'config','settings');
+    const cfgSnap = await getDoc(cfgRef);
+    if(!cfgSnap.exists()) {
+      await setDoc(cfgRef, {adminPassword:'1234'});
+    }
+  } catch(e){ console.error(e); }
+  hideLoading();
+}
+init();
+
+// ===================== LOGIN =====================
+window.switchLoginTab = (tab) => {
+  document.querySelectorAll('.login-tab').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('staffLoginDiv').style.display = tab==='staff'?'block':'none';
+  document.getElementById('adminLoginDiv').style.display = tab==='admin'?'block':'none';
+};
+
+window.loginAsStaff = () => {
+  const name = document.getElementById('staffLoginSelect').value;
+  if(!name){ alert('اختر اسمك أولاً'); return; }
+  currentUser = {name, role:'staff'};
+  enterApp();
+};
+
+window.loginAsAdmin = async () => {
+  const pass = document.getElementById('adminPassInput').value;
+  const cfgSnap = await getDoc(doc(db,'config','settings'));
+  const stored = cfgSnap.exists() ? cfgSnap.data().adminPassword : '1234';
+  if(pass === stored){
+    currentUser = {name:'المدير', role:'admin'};
+    document.getElementById('adminErr').style.display='none';
+    enterApp();
+  } else {
+    document.getElementById('adminErr').style.display='block';
+  }
+};
+
+function enterApp(){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('mainApp').style.display='block';
+  document.getElementById('headerUser').textContent = currentUser.role==='admin' ? '🏫 وضع المدير' : `👤 ${currentUser.name}`;
+  buildTabs();
+  loadData();
+}
+
+window.logout = () => {
+  currentUser=null;
+  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('mainApp').style.display='none';
+  document.getElementById('adminPassInput').value='';
+};
+
+// ===================== TABS =====================
+function buildTabs(){
+  const tabs = document.getElementById('mainTabs');
+  if(currentUser.role==='admin'){
+    tabs.innerHTML = `
+      <button class="tab-btn active" onclick="showPage('add',this)">➕ تعميم جديد</button>
+      <button class="tab-btn" onclick="showPage('circulars',this)">📁 التعاميم</button>
+      <button class="tab-btn" onclick="showPage('reports',this)">📊 التقارير</button>
+      <button class="tab-btn" onclick="showPage('staff-mgmt',this)">👥 الكوادر</button>
+    `;
+  } else {
+    tabs.innerHTML = `<button class="tab-btn active" onclick="showPage('my-circulars',this)">📋 تعاميمي</button>`;
+  }
+}
+
+window.showPage = (page, btn) => {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  if(btn) btn.classList.add('active');
+  if(page==='circulars') renderAdminCirculars();
+  if(page==='reports') renderReports();
+  if(page==='add') renderChips();
+  if(page==='staff-mgmt') renderStaffMgmt();
+  if(page==='my-circulars') renderMyCirculars();
+};
+
+// ===================== LOAD DATA =====================
+async function loadData(){
+  showLoading('جاري تحميل البيانات...');
+  // Load staff
+  const staffSnap = await getDocs(collection(db,'staff'));
+  staffList = staffSnap.docs.map(d=>({id:d.id,...d.data()}));
+  // Load circulars
+  const circSnap = await getDocs(collection(db,'circulars'));
+  circulars = circSnap.docs.map(d=>({id:d.id,...d.data()}));
+  circulars.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+  hideLoading();
+  if(currentUser.role==='admin'){
+    showPage('add', document.querySelector('.tab-btn'));
+  } else {
+    showPage('my-circulars', document.querySelector('.tab-btn'));
+  }
+}
+
+// ===================== STAFF MANAGEMENT =====================
+window.addStaff = async () => {
+  const input = document.getElementById('newStaffName');
+  const name = input.value.trim();
+  if(!name) return;
+  if(staffList.find(s=>s.name===name)){ alert('الاسم موجود مسبقاً'); return; }
+  showLoading('جاري الإضافة...');
+  const ref = await addDoc(collection(db,'staff'),{name, createdAt: serverTimestamp()});
+  staffList.push({id:ref.id, name});
+  input.value='';
+  hideLoading();
+  renderStaffMgmt();
+  renderChips();
+  updateLoginSelect();
+};
+
+window.removeStaff = async (id, name) => {
+  if(!confirm(`حذف "${name}"؟`)) return;
+  showLoading('جاري الحذف...');
+  await deleteDoc(doc(db,'staff',id));
+  staffList = staffList.filter(s=>s.id!==id);
+  hideLoading();
+  renderStaffMgmt();
+  renderChips();
+  updateLoginSelect();
+};
+
+function updateLoginSelect(){
+  const sel = document.getElementById('staffLoginSelect');
+  sel.innerHTML = '<option value="">-- اختر اسمك --</option>';
+  staffList.forEach(s=>{ sel.innerHTML += `<option value="${s.name}">${s.name}</option>`; });
+}
+
+window.changePassword = async () => {
+  const val = document.getElementById('newPassInput').value.trim();
+  if(!val){ alert('أدخل كلمة السر'); return; }
+  await setDoc(doc(db,'config','settings'),{adminPassword:val});
+  alert('✅ تم حفظ كلمة السر الجديدة');
+  document.getElementById('newPassInput').value='';
+};
+
+// ===================== CIRCULARS =====================
+window.addCircular = async () => {
+  const title = document.getElementById('circTitle').value.trim();
+  const date = document.getElementById('circDate').value;
+  const body = document.getElementById('circBody').value.trim();
+  const selected = [...document.querySelectorAll('.chip.selected')].map(c=>c.dataset.name);
+  if(!title){ alert('أدخل عنوان التعميم'); return; }
+  if(!body){ alert('أدخل نص التعميم'); return; }
+  if(selected.length===0){ alert('حدد شخصاً واحداً على الأقل'); return; }
+  showLoading('جاري النشر...');
+  const circ = {
+    title, date: date||new Date().toISOString().split('T')[0],
+    body, staff: selected, acknowledgements: {},
+    createdAt: serverTimestamp()
+  };
+  const ref = await addDoc(collection(db,'circulars'), circ);
+  circ.id = ref.id;
+  circulars.unshift(circ);
+  document.getElementById('circTitle').value='';
+  document.getElementById('circBody').value='';
+  hideLoading();
+  alert('✅ تم نشر التعميم بنجاح');
+};
+
+window.deleteCircular = async (id) => {
+  if(!confirm('حذف هذا التعميم نهائياً؟')) return;
+  showLoading('جاري الحذف...');
+  await deleteDoc(doc(db,'circulars',id));
+  circulars = circulars.filter(c=>c.id!==id);
+  hideLoading();
+  renderAdminCirculars();
+};
+
+// ===================== ACKNOWLEDGE =====================
+window.openConfirmModal = (circId) => {
+  const circ = circulars.find(c=>c.id===circId);
+  if(!circ) return;
+  confirmTarget = {circId};
+  confirmChecked = false;
+  document.getElementById('confirmModalTitle').textContent = '📋 ' + circ.title;
+  document.getElementById('confirmModalBody').textContent = circ.body;
+  document.getElementById('confirmCheckbox').classList.remove('checked');
+  document.getElementById('confirmCheckWrap').style.background='#f0f7f4';
+  const btn = document.getElementById('confirmSubmitBtn');
+  btn.disabled=true; btn.style.opacity='.5';
+  document.getElementById('confirmModal').classList.add('open');
+};
+
+window.toggleConfirmCheck = () => {
+  confirmChecked = !confirmChecked;
+  const cb = document.getElementById('confirmCheckbox');
+  const wrap = document.getElementById('confirmCheckWrap');
+  const btn = document.getElementById('confirmSubmitBtn');
+  if(confirmChecked){
+    cb.classList.add('checked');
+    wrap.style.background='#d4edda';
+    btn.disabled=false; btn.style.opacity='1';
+  } else {
+    cb.classList.remove('checked');
+    wrap.style.background='#f0f7f4';
+    btn.disabled=true; btn.style.opacity='.5';
+  }
+};
+
+window.submitAcknowledge = async () => {
+  if(!confirmChecked || !confirmTarget) return;
+  const {circId} = confirmTarget;
+  showLoading('جاري التسجيل...');
+  const now = new Date();
+  const ackData = {
+    time: now.toISOString(),
+    timeFormatted: now.toLocaleString('ar-SA'),
+    name: currentUser.name
+  };
+  // Update in Firestore
+  const circRef = doc(db,'circulars',circId);
+  const field = `acknowledgements.${currentUser.name.replace(/\./g,'_')}`;
+  await updateDoc(circRef, { [field]: ackData });
+  // Update local
+  const circ = circulars.find(c=>c.id===circId);
+  if(circ){
+    if(!circ.acknowledgements) circ.acknowledgements={};
+    circ.acknowledgements[currentUser.name] = ackData;
+  }
+  hideLoading();
+  closeConfirmModal();
+  renderMyCirculars();
+  alert(`✅ تم تسجيل اطلاعك بنجاح\n${ackData.timeFormatted}`);
+};
+
+window.closeConfirmModal = () => document.getElementById('confirmModal').classList.remove('open');
+
+// ===================== RENDER =====================
+function renderChips(){
+  const chips = document.getElementById('staffChips');
+  if(staffList.length===0){
+    chips.innerHTML='<span style="color:#aaa;font-size:13px">أضف كوادر أولاً من تبويب الكوادر</span>';
+    return;
+  }
+  chips.innerHTML = staffList.map(s=>`<div class="chip selected" data-name="${s.name}" onclick="this.classList.toggle('selected')">${s.name}</div>`).join('');
+}
+
+window.selectAllChips = () => document.querySelectorAll('.chip').forEach(c=>c.classList.add('selected'));
+window.clearAllChips = () => document.querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));
+
+function renderStaffMgmt(){
+  const el = document.getElementById('staffListAdmin');
+  if(staffList.length===0){ el.innerHTML='<p style="color:#aaa;font-size:14px">لا يوجد كوادر بعد</p>'; return; }
+  el.innerHTML = staffList.map(s=>`
+    <div class="staff-row">
+      <span style="font-weight:600">👤 ${s.name}</span>
+      <button class="btn btn-danger" onclick="removeStaff('${s.id}','${s.name}')">حذف</button>
+    </div>`).join('');
+}
+
+function renderAdminCirculars(){
+  const el = document.getElementById('adminCircularsList');
+  if(circulars.length===0){
+    el.innerHTML='<div class="empty-state"><div class="emoji">📭</div><p>لا توجد تعاميم بعد</p></div>';
+    return;
+  }
+  el.innerHTML = circulars.map(c=>{
+    const acks = c.acknowledgements||{};
+    const signed = c.staff.filter(s=>acks[s]||acks[s.replace(/\./g,'_')]).length;
+    const total = c.staff.length;
+    const pct = total ? Math.round(signed/total*100) : 0;
+    return `
+    <div class="card" style="border-top:4px solid var(--primary)">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px">
+        <div>
+          <div style="font-weight:800;font-size:16px;margin-bottom:3px">${c.title}</div>
+          <div style="font-size:12px;color:var(--muted)">📅 ${c.date}</div>
+        </div>
+        <button class="btn btn-danger" onclick="deleteCircular('${c.id}')">🗑️ حذف</button>
+      </div>
+      <div style="margin-top:10px">
+        <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:600;margin-bottom:3px">
+          <span>نسبة الاطلاع</span><span>${signed}/${total} (${pct}%)</span>
+        </div>
+        <div class="progress-bar-wrap"><div class="progress-bar" style="width:${pct}%"></div></div>
+      </div>
+      <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:5px">
+        ${c.staff.map(s=>{
+          const ack = acks[s]||acks[s.replace(/\./g,'_')];
+          return `<span style="padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600;background:${ack?'var(--success-bg)':'var(--danger-bg)'};color:${ack?'var(--success)':'var(--danger)'}">
+            ${ack?'✅':'⏳'} ${s}
+          </span>`;
+        }).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderReports(){
+  const el = document.getElementById('reportContent');
+  if(circulars.length===0){
+    el.innerHTML='<div class="empty-state"><div class="emoji">📊</div><p>لا توجد تعاميم</p></div>';
+    return;
+  }
+  el.innerHTML = circulars.map(c=>{
+    const acks = c.acknowledgements||{};
+    const signed = c.staff.filter(s=>acks[s]||acks[s.replace(/\./g,'_')]);
+    const pending = c.staff.filter(s=>!acks[s]&&!acks[s.replace(/\./g,'_')]);
+    const pct = c.staff.length ? Math.round(signed.length/c.staff.length*100) : 0;
+    return `
+    <div class="card">
+      <h2>📋 ${c.title}</h2>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px">📅 ${c.date} &nbsp;|&nbsp; ${signed.length}/${c.staff.length} اطلعوا (${pct}%)</div>
+      <div class="progress-bar-wrap" style="margin-bottom:14px"><div class="progress-bar" style="width:${pct}%"></div></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div>
+          <div style="font-weight:700;font-size:13px;color:var(--success);margin-bottom:7px">✅ اطلعوا (${signed.length})</div>
+          ${signed.length===0?'<p style="font-size:12px;color:#aaa">لا أحد بعد</p>':
+            signed.map(s=>{
+              const ack = acks[s]||acks[s.replace(/\./g,'_')];
+              return `<div style="font-size:13px;margin-bottom:3px;font-weight:600">👤 ${s}</div>
+                      <div style="font-size:11px;color:#aaa;margin-bottom:7px">${ack?.timeFormatted||''}</div>`;
+            }).join('')}
+        </div>
+        <div>
+          <div style="font-weight:700;font-size:13px;color:var(--danger);margin-bottom:7px">⏳ لم يطلعوا (${pending.length})</div>
+          ${pending.length===0?'<p style="font-size:13px;color:var(--success);font-weight:600">✅ الجميع اطلعوا!</p>':
+            pending.map(s=>`<div style="font-size:13px;margin-bottom:6px">👤 ${s}</div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderMyCirculars(){
+  const el = document.getElementById('myCircularsList');
+  const mine = circulars.filter(c=>c.staff.includes(currentUser.name));
+  if(mine.length===0){
+    el.innerHTML='<div class="empty-state"><div class="emoji">📭</div><p>لا توجد تعاميم موجهة لك</p></div>';
+    return;
+  }
+  el.innerHTML = mine.map(c=>{
+    const acks = c.acknowledgements||{};
+    const ack = acks[currentUser.name]||acks[currentUser.name.replace(/\./g,'_')];
+    return `
+    <div class="card" style="border-right:4px solid ${ack?'var(--success)':'var(--accent)'}">
+      <div style="font-weight:800;font-size:16px;margin-bottom:3px">${c.title}</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px">📅 ${c.date}</div>
+      <div class="circular-text">${c.body}</div>
+      ${ack ? `
+        <div class="alert alert-success">
+          ✅ تم تسجيل اطلاعك في ${ack.timeFormatted||ack.time}
+        </div>
+      ` : `
+        <button class="btn btn-success btn-full" onclick="openConfirmModal('${c.id}')">
+          👁️ اطلعت على التعميم
+        </button>
+      `}
+    </div>`;
+  }).join('');
+}
+
+// Set today date default
+document.getElementById('circDate').value = new Date().toISOString().split('T')[0];
+</script>
+</body>
+</html>
