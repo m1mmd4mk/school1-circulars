@@ -362,7 +362,7 @@ function renderDirectView(circ, name){
       ${pdfBtn}
       <div class="confirm-wrap" id="dWrap" onclick="toggleDCb()">
         <div class="big-cb" id="dCb"></div>
-        <p style="font-size:14px;font-weight:600">أؤكد اطلاعي على هذا التعميم وموافقتي على محتواه</p>
+        <p style="font-size:14px;font-weight:600">أؤكد اطلاعي على هذا التعميم</p>
       </div>
       <button class="btn btn-success btn-full" id="dBtn" onclick="submitDirectAck('${circ.id}','${encodeURIComponent(name)}')" disabled style="opacity:.5">✅ تأكيد الاطلاع</button>
     </div>`;
@@ -697,7 +697,7 @@ function showWaModal(circ){
         const phone=s?.phone||'';
         const ack=acks[name]||acks[name.replace(/\./g,'_')];
         const link=getStaffLink(circ.id,name);
-        const msg=`السلام عليكم ${name} 👋\n\nيرجى الاطلاع على التعميم التالي والموافقة عليه:\n\n📋 *${circ.title}*\n\n🔗 اضغط على الرابط:\n${link}${circ.pdfUrl?'\n\n📎 (يوجد ملف PDF داخل الرابط)':''}`;
+        const msg=`يرجى الاطلاع على التعميم التالي:\n\n📋 *${circ.title}*\n\n🔗 ${link}${circ.pdfUrl?'\n📎 PDF متاح داخل الرابط':''}`;
         return `
         <div class="wa-send-row">
           <div style="flex:1;min-width:0">
