@@ -298,9 +298,7 @@ function getStaffLink(circId, staffName){
 }
 function buildWaUrl(phone, msg){
   const enc = encodeURIComponent(msg);
-  if(/Android|iPhone|iPad/i.test(navigator.userAgent))
-    return `https://wa.me/${phone}?text=${enc}`;
-  return `https://web.whatsapp.com/send?phone=${phone}&text=${enc}`;
+  return `https://wa.me/${phone}?text=${enc}`;
 }
 function getStaffByName(name){ return staffList.find(s=>s.name===name); }
 
