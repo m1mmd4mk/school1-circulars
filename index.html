@@ -169,7 +169,7 @@ textarea{resize:vertical;min-height:85px}
         <div style="font-size:28px;margin-bottom:4px">📎</div>
         <p style="font-size:13px;color:var(--muted)">اضغط لرفع ملف PDF</p>
       </div>
-      <div id="pdfPreview" style="display:none" class="pdf-preview">
+      <div id="pdfPreview" style="display:none;align-items:center;gap:10px;background:#f0f4f8;border-radius:8px;padding:10px 13px;margin-bottom:11px">
         <span style="font-size:22px">📄</span>
         <div style="flex:1"><div id="pdfName" style="font-weight:600;font-size:13px"></div><div id="pdfSize" style="font-size:11px;color:var(--muted)"></div></div>
         <button class="btn btn-danger" onclick="removePdf()">✕</button>
@@ -627,21 +627,34 @@ window.clearAllChips=()=>document.querySelectorAll('#staffChipsArea .chip').forE
 window.selectCatChips=(cat)=>document.querySelectorAll(`#staffChipsArea .chip[data-cat="${cat}"]`).forEach(c=>c.classList.add('selected'));
 window.deselectCatChips=(cat)=>document.querySelectorAll(`#staffChipsArea .chip[data-cat="${cat}"]`).forEach(c=>c.classList.remove('selected'));
 
-// ---- PDF ----
-window.handlePdfSelect=(input)=>{
-  const f=input.files[0];if(!f) return;
-  selectedPdfFile=f;
-  document.getElementById('pdfName').textContent=f.name;
-  document.getElementById('pdfSize').textContent=(f.size/1024/1024).toFixed(2)+' MB';
-  document.getElementById('pdfPreview').style.display='flex';
-  document.getElementById('pdfUploadArea').style.display='none';
+// ---- PDF LINK ----
+let selectedPdfFile = null;
+window.handlePdfSelect = (input) => {
+  const f = input.files[0]; if(!f) return;
+  selectedPdfFile = f;
+  document.getElementById('pdfName').textContent = f.name;
+  document.getElementById('pdfSize').textContent = (f.size/1024/1024).toFixed(2) + ' MB';
+  document.getElementById('pdfPreview').style.display = 'flex';
+  document.getElementById('pdfUploadArea').style.display = 'none';
 };
-window.removePdf=()=>{
-  selectedPdfFile=null;
-  document.getElementById('pdfInput').value='';
-  document.getElementById('pdfPreview').style.display='none';
-  document.getElementById('pdfUploadArea').style.display='block';
+window.removePdf = () => {
+  selectedPdfFile = null;
+  document.getElementById('pdfInput').value = '';
+  document.getElementById('pdfPreview').style.display = 'none';
+  document.getElementById('pdfUploadArea').style.display = 'block';
 };
+async function uploadToCloudinary(file) {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', 'blfwjnmf');
+  formData.append('resource_type', 'raw');
+  const res = await fetch('https://api.cloudinary.com/v1_1/dyjmxvomn/raw/upload', {
+    method: 'POST', body: formData
+  });
+  const data = await res.json();
+  if(data.secure_url) return data.secure_url;
+  throw new Error('فشل رفع الملف');
+}
 
 // ---- ADD CIRCULAR ----
 window.addCircular=async()=>{
@@ -653,16 +666,12 @@ window.addCircular=async()=>{
   if(!body){alert('أدخل نص التعميم');return;}
   if(selected.length===0){alert('حدد شخصاً واحداً على الأقل');return;}
 
-  let pdfUrl=null;
+  let pdfUrl = null;
   if(selectedPdfFile){
     showLoading('جاري رفع ملف PDF...');
-    try {
-      const r=sRef(storage,`circulars/${Date.now()}_${selectedPdfFile.name}`);
-      await uploadBytes(r,selectedPdfFile);
-      pdfUrl=await getDownloadURL(r);
-    } catch(e){ alert('تعذر رفع PDF — تأكد من تفعيل Firebase Storage'); }
+    try { pdfUrl = await uploadToCloudinary(selectedPdfFile); }
+    catch(e){ alert('تعذر رفع PDF، حاول مرة أخرى'); hideLoading(); return; }
   }
-
   showLoading('جاري النشر...');
   const circ={title,date:date||new Date().toISOString().split('T')[0],body,staff:selected,acknowledgements:{},pdfUrl,createdAt:serverTimestamp()};
   const ref=await addDoc(collection(db,'circulars'),circ);
