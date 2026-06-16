@@ -3,783 +3,697 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>نظام التعاميم الإلكترونية</title>
+<title>نظام التعاميم</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#f0f4f8;--card:#fff;--primary:#1a4b8c;--primary-light:#2d6fcc;
-  --success:#2e7d52;--success-bg:#e8f5ee;--danger:#c0392b;--danger-bg:#fdecea;
-  --text:#1a2332;--muted:#6b7a8d;--border:#d1dbe8;--radius:12px;
-  --shadow:0 2px 12px rgba(0,0,0,.08);--wa:#25d366
+  --primary:#1a4b8c;--primary2:#2d6fcc;--success:#2e7d52;--sbg:#e8f5ee;
+  --danger:#c0392b;--dbg:#fdecea;--bg:#f0f4f8;--card:#fff;
+  --text:#1a2332;--muted:#6b7a8d;--border:#d1dbe8;--wa:#25d366
 }
 body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-/* LOGIN */
-#loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
-.login-box{background:white;border-radius:20px;padding:36px 28px;width:100%;max-width:360px;box-shadow:0 8px 32px rgba(0,0,0,.12);text-align:center}
-.login-box .logo{font-size:52px;margin-bottom:10px}
-.login-box h1{font-size:21px;font-weight:800;color:var(--primary);margin-bottom:4px}
-.login-box p{color:var(--muted);font-size:13px;margin-bottom:24px}
-/* HEADER */
-header{background:var(--primary);color:white;padding:13px 18px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,.2)}
-header h1{font-size:17px;font-weight:700}
-header p{font-size:11px;opacity:.8;margin-top:1px}
-.logout-btn{background:rgba(255,255,255,.2);border:none;color:white;padding:6px 13px;border-radius:8px;cursor:pointer;font-size:13px;font-family:inherit;font-weight:600}
-/* TABS */
-.tabs{display:flex;background:white;border-bottom:2px solid var(--border);padding:0 10px;gap:2px;overflow-x:auto}
-.tab-btn{padding:12px 14px;border:none;background:none;font-size:13px;font-family:inherit;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;font-weight:500;transition:.2s}
-.tab-btn.active{color:var(--primary);border-bottom-color:var(--primary)}
-/* PAGES */
-.page{display:none;padding:14px;max-width:700px;margin:0 auto}
-.page.active{display:block}
-/* CARD */
-.card{background:var(--card);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);margin-bottom:12px}
-.card h2{font-size:15px;font-weight:700;margin-bottom:13px;color:var(--primary)}
-/* INPUTS */
-label{display:block;font-size:13px;font-weight:600;margin-bottom:5px}
-input[type=text],input[type=password],input[type=date],input[type=tel],textarea,select{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;color:var(--text);background:white;margin-bottom:11px;direction:rtl;transition:.2s}
-input[type=tel]{direction:ltr;text-align:left}
-input:focus,textarea:focus,select:focus{outline:none;border-color:var(--primary-light)}
-textarea{resize:vertical;min-height:85px}
-/* BUTTONS */
-.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border:none;border-radius:8px;font-size:13px;font-family:inherit;font-weight:600;cursor:pointer;transition:.2s;text-decoration:none}
-.btn-primary{background:var(--primary);color:white}
-.btn-primary:hover{background:var(--primary-light)}
-.btn-success{background:var(--success);color:white}
-.btn-danger{background:var(--danger);color:white;font-size:12px;padding:5px 10px}
-.btn-outline{background:white;color:var(--primary);border:1.5px solid var(--primary)}
-.btn-wa{background:var(--wa);color:white}
-.btn-full{width:100%;justify-content:center}
-/* CATEGORY FILTER */
-.cat-filter-wrap{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:13px}
-.cat-btn{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;border:1.5px solid var(--border);background:white;cursor:pointer;transition:.15s;white-space:nowrap}
-.cat-btn:hover{border-color:var(--primary-light);background:#f0f4ff}
-.cat-btn.active{background:var(--primary);color:white;border-color:var(--primary)}
-/* STAFF CHIPS */
-.staff-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:11px}
-.chip{padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;border:1.5px solid var(--border);background:white;cursor:pointer;transition:.15s}
-.chip.selected{background:var(--primary);color:white;border-color:var(--primary)}
-/* PROGRESS */
-.progress-bar-wrap{background:var(--border);border-radius:10px;height:6px;overflow:hidden;margin-top:5px}
-.progress-bar{height:100%;background:var(--success);border-radius:10px;transition:width .4s}
-/* ALERTS */
-.alert{padding:10px 13px;border-radius:8px;font-size:13px;margin-bottom:11px;font-weight:500}
-.alert-success{background:var(--success-bg);color:var(--success)}
-/* MODAL */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:100;align-items:center;justify-content:center;padding:14px}
-.modal-overlay.open{display:flex}
-.modal{background:white;border-radius:16px;padding:20px;width:100%;max-width:500px;max-height:92vh;overflow-y:auto}
-.modal h3{font-size:16px;font-weight:700;margin-bottom:13px;color:var(--primary)}
-/* STAFF DIRECT PAGE */
-#staffDirectPage{display:none;min-height:100vh;background:var(--bg)}
-.staff-header{background:var(--primary);color:white;padding:18px;text-align:center}
-.staff-header h1{font-size:18px;font-weight:800}
-.staff-header p{font-size:13px;opacity:.85;margin-top:3px}
-/* PDF */
-.pdf-upload-area{border:2px dashed var(--border);border-radius:10px;padding:18px;text-align:center;cursor:pointer;transition:.2s;margin-bottom:11px;background:#fafcff}
-.pdf-upload-area:hover{border-color:var(--primary-light)}
-.pdf-preview{display:flex;align-items:center;gap:10px;background:#f0f4f8;border-radius:8px;padding:10px 13px;margin-bottom:11px}
-/* CONFIRM */
-.confirm-wrap{display:flex;align-items:center;gap:11px;background:#f0f7f4;border:2px solid var(--success);border-radius:10px;padding:14px;margin-bottom:13px;cursor:pointer}
-.big-cb{width:26px;height:26px;border:2.5px solid var(--success);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;background:white;transition:.2s}
-.big-cb.checked{background:var(--success);color:white}
 /* LOADING */
-.loading-overlay{display:none;position:fixed;inset:0;background:rgba(255,255,255,.85);z-index:200;align-items:center;justify-content:center;flex-direction:column;gap:10px}
-.loading-overlay.show{display:flex}
-.spinner{width:38px;height:38px;border:4px solid #ddd;border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.empty-state{text-align:center;padding:32px 20px;color:var(--muted)}
-.empty-state .emoji{font-size:40px;margin-bottom:8px}
+#overlay{display:none;position:fixed;inset:0;background:rgba(255,255,255,.88);z-index:999;align-items:center;justify-content:center;flex-direction:column;gap:12px}
+#overlay.on{display:flex}
+.spin{width:40px;height:40px;border:4px solid #ddd;border-top-color:var(--primary);border-radius:50%;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+#loadMsg{color:var(--primary);font-weight:700;font-size:15px}
+/* LOGIN */
+#loginWrap{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+.login-box{background:#fff;border-radius:20px;padding:40px 30px;width:100%;max-width:360px;box-shadow:0 8px 32px rgba(0,0,0,.12);text-align:center}
+.login-box .ico{font-size:56px;margin-bottom:12px}
+.login-box h1{font-size:22px;font-weight:800;color:var(--primary);margin-bottom:6px}
+.login-box p{color:var(--muted);font-size:14px;margin-bottom:28px}
+/* HEADER */
+header{background:var(--primary);color:#fff;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+header h1{font-size:17px;font-weight:700}
+header p{font-size:11px;opacity:.8;margin-top:2px}
+.hbtn{background:rgba(255,255,255,.2);border:none;color:#fff;padding:7px 14px;border-radius:8px;cursor:pointer;font-size:13px;font-family:inherit;font-weight:600}
+/* TABS */
+.tabs{display:flex;background:#fff;border-bottom:2px solid var(--border);padding:0 10px;overflow-x:auto}
+.tbtn{padding:13px 15px;border:none;background:none;font-size:13px;font-family:inherit;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;font-weight:600;transition:.2s}
+.tbtn.on{color:var(--primary);border-bottom-color:var(--primary)}
+/* PAGE */
+.pg{display:none;padding:16px;max-width:700px;margin:0 auto}
+.pg.on{display:block}
+/* CARD */
+.card{background:#fff;border-radius:14px;padding:18px;box-shadow:0 2px 12px rgba(0,0,0,.07);margin-bottom:14px}
+.card h2{font-size:15px;font-weight:700;color:var(--primary);margin-bottom:14px}
+/* FORM */
+label{display:block;font-size:13px;font-weight:600;margin-bottom:5px;color:var(--text)}
+input,textarea,select{width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:9px;font-size:14px;font-family:inherit;color:var(--text);background:#fff;margin-bottom:12px;direction:rtl;transition:.2s}
+input[type=tel]{direction:ltr;text-align:left}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--primary2)}
+textarea{resize:vertical;min-height:90px}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border:none;border-radius:9px;font-size:14px;font-family:inherit;font-weight:600;cursor:pointer;transition:.15s;text-decoration:none}
+.bp{background:var(--primary);color:#fff}.bp:hover{background:var(--primary2)}
+.bs{background:var(--success);color:#fff}
+.bd{background:var(--danger);color:#fff;font-size:12px;padding:6px 12px}
+.bo{background:#fff;color:var(--primary);border:1.5px solid var(--primary)}
+.bw{background:var(--wa);color:#fff}
+.bf{width:100%;justify-content:center}
+/* CHIPS */
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.chip{padding:6px 13px;border-radius:20px;font-size:12px;font-weight:600;border:1.5px solid var(--border);background:#fff;cursor:pointer;transition:.15s}
+.chip.on{background:var(--primary);color:#fff;border-color:var(--primary)}
+/* PROGRESS */
+.pb-wrap{background:var(--border);border-radius:10px;height:7px;overflow:hidden;margin-top:5px}
+.pb{height:100%;background:var(--success);border-radius:10px;transition:width .4s}
+/* BADGE */
+.badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
+.badge-s{background:var(--sbg);color:var(--success)}
+.badge-d{background:var(--dbg);color:var(--danger)}
+/* ALERT */
+.alert-s{background:var(--sbg);color:var(--success);padding:11px 14px;border-radius:9px;font-size:14px;font-weight:500;margin-bottom:12px}
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:center;justify-content:center;padding:16px}
+.modal-bg.on{display:flex}
+.modal{background:#fff;border-radius:16px;padding:22px;width:100%;max-width:500px;max-height:92vh;overflow-y:auto}
+.modal h3{font-size:16px;font-weight:700;color:var(--primary);margin-bottom:14px}
+/* CONFIRM */
+.conf-wrap{display:flex;align-items:center;gap:12px;background:#f0f7f4;border:2px solid var(--success);border-radius:10px;padding:14px;margin-bottom:13px;cursor:pointer}
+.conf-cb{width:27px;height:27px;border:2.5px solid var(--success);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;background:#fff;transition:.2s}
+.conf-cb.on{background:var(--success);color:#fff}
+/* PDF UPLOAD */
+.pdf-area{border:2px dashed var(--border);border-radius:10px;padding:20px;text-align:center;cursor:pointer;margin-bottom:12px;background:#fafcff;transition:.2s}
+.pdf-area:hover{border-color:var(--primary2)}
+.pdf-prev{display:none;align-items:center;gap:10px;background:#f0f4f8;border-radius:9px;padding:10px 13px;margin-bottom:12px}
+/* CAT SECTION */
+.cat-section{margin-bottom:13px}
+.cat-hdr{display:flex;align-items:center;justify-content:space-between;background:#e8f0fe;padding:6px 11px;border-radius:8px;margin-bottom:7px}
+.cat-hdr span{font-size:13px;font-weight:700;color:var(--primary)}
+.cat-hdr-btns{display:flex;gap:5px}
+.cat-hdr-btns button{font-size:11px;padding:3px 9px;border-radius:6px;border:none;cursor:pointer;font-family:inherit;font-weight:600}
+/* STAFF DIRECT */
+#directWrap{display:none;min-height:100vh;background:var(--bg)}
+.d-hdr{background:var(--primary);color:#fff;padding:20px;text-align:center}
+.d-hdr .ico{font-size:40px;margin-bottom:8px}
+.d-hdr h1{font-size:19px;font-weight:800}
+.d-hdr p{font-size:14px;opacity:.85;margin-top:4px}
+/* CAT FILTER PILLS */
+.cat-pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:13px}
+.pill{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;border:1.5px solid var(--border);background:#fff;cursor:pointer;white-space:nowrap;transition:.15s}
+.pill.on{background:var(--primary);color:#fff;border-color:var(--primary)}
 /* STAFF CARD */
-.staff-card{background:#f8fafc;border-radius:10px;padding:12px;margin-bottom:8px;border:1px solid var(--border)}
-.staff-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
-.staff-card-name{font-weight:700;font-size:14px}
-.staff-cat-tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600;background:#e8f0fe;color:var(--primary);margin-top:3px}
+.scard{background:#f8fafc;border-radius:10px;padding:12px;margin-bottom:8px;border:1px solid var(--border)}
+.scard-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
 /* WA ROW */
-.wa-send-row{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:#f0fff5;border-radius:9px;margin-bottom:7px;border:1px solid #b2dfc4;flex-wrap:wrap;gap:7px}
-.wa-send-name{font-weight:700;font-size:13px;margin-bottom:1px}
-.wa-send-phone{font-size:11px;color:var(--muted);direction:ltr}
-/* CATEGORY SECTION IN STAFF SELECT */
-.cat-section{margin-bottom:14px}
-.cat-section-title{font-size:13px;font-weight:800;color:var(--primary);margin-bottom:7px;padding:5px 10px;background:#e8f0fe;border-radius:8px;display:flex;align-items:center;justify-content:space-between}
-.select-cat-btn{font-size:11px;padding:3px 9px;border-radius:6px;border:none;background:var(--primary);color:white;cursor:pointer;font-family:inherit;font-weight:600}
-.deselect-cat-btn{font-size:11px;padding:3px 9px;border-radius:6px;border:none;background:#ccc;color:white;cursor:pointer;font-family:inherit;font-weight:600}
-@media(max-width:480px){header h1{font-size:14px}.tab-btn{font-size:12px;padding:10px 10px}}
+.wa-row{display:flex;align-items:center;justify-content:space-between;padding:10px 13px;background:#f0fff5;border-radius:9px;margin-bottom:7px;border:1px solid #b2dfc4;flex-wrap:wrap;gap:7px}
+.empty{text-align:center;padding:36px 20px;color:var(--muted)}
+.empty .e-ico{font-size:44px;margin-bottom:10px}
+@media(max-width:480px){header h1{font-size:15px}.tbtn{font-size:12px;padding:11px 11px}}
 </style>
 </head>
 <body>
 
-<div class="loading-overlay" id="loadingOverlay">
-  <div class="spinner"></div>
-  <p id="loadingMsg" style="color:var(--primary);font-weight:600">جاري التحميل...</p>
-</div>
+<!-- LOADING OVERLAY -->
+<div id="overlay"><div class="spin"></div><p id="loadMsg">جاري التحميل...</p></div>
 
-<!-- STAFF DIRECT PAGE -->
-<div id="staffDirectPage">
-  <div class="staff-header">
-    <div style="font-size:36px;margin-bottom:6px">📋</div>
+<!-- STAFF DIRECT PAGE (WhatsApp link) -->
+<div id="directWrap">
+  <div class="d-hdr">
+    <div class="ico">📋</div>
     <h1>نظام التعاميم الإلكترونية</h1>
-    <p id="sdStaffName"></p>
+    <p id="dName"></p>
   </div>
-  <div style="padding:14px;max-width:600px;margin:0 auto" id="sdContent"></div>
+  <div style="padding:16px;max-width:620px;margin:0 auto" id="dContent"></div>
 </div>
 
-<!-- LOGIN -->
-<div id="loginScreen">
+<!-- ADMIN LOGIN -->
+<div id="loginWrap">
   <div class="login-box">
-    <div class="logo">📋</div>
+    <div class="ico">📋</div>
     <h1>نظام التعاميم</h1>
-    <p>دخول المدير</p>
+    <p>بوابة المدير</p>
     <label>كلمة السر</label>
-    <input type="password" id="adminPassInput" placeholder="كلمة السر" onkeydown="if(event.key==='Enter')loginAsAdmin()">
-    <button class="btn btn-primary btn-full" onclick="loginAsAdmin()">دخول</button>
-    <p id="adminErr" style="color:var(--danger);font-size:13px;margin-top:8px;display:none">كلمة السر غير صحيحة</p>
+    <input type="password" id="passInput" placeholder="أدخل كلمة السر" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="btn bp bf" onclick="doLogin()">دخول</button>
+    <p id="errMsg" style="color:var(--danger);font-size:13px;margin-top:10px;display:none">❌ كلمة السر غير صحيحة</p>
   </div>
 </div>
 
-<!-- MAIN APP -->
-<div id="mainApp" style="display:none">
+<!-- ADMIN APP -->
+<div id="appWrap" style="display:none">
   <header>
-    <div>
-      <h1>📋 نظام التعاميم الإلكترونية</h1>
-      <p>لوحة تحكم المدير</p>
-    </div>
-    <button class="logout-btn" onclick="logout()">خروج</button>
+    <div><h1>📋 نظام التعاميم الإلكترونية</h1><p>لوحة تحكم المدير</p></div>
+    <button class="hbtn" onclick="doLogout()">خروج</button>
   </header>
   <div class="tabs">
-    <button class="tab-btn active" onclick="showPage('add',this)">➕ تعميم جديد</button>
-    <button class="tab-btn" onclick="showPage('circulars',this)">📁 التعاميم</button>
-    <button class="tab-btn" onclick="showPage('reports',this)">📊 التقارير</button>
-    <button class="tab-btn" onclick="showPage('staff-mgmt',this)">👥 الكوادر</button>
-    <button class="tab-btn" onclick="showPage('cat-mgmt',this)">🏷️ التصنيفات</button>
+    <button class="tbtn on" onclick="goPage('add',this)">➕ تعميم جديد</button>
+    <button class="tbtn" onclick="goPage('circs',this)">📁 التعاميم</button>
+    <button class="tbtn" onclick="goPage('reports',this)">📊 التقارير</button>
+    <button class="tbtn" onclick="goPage('staff',this)">👥 الكوادر</button>
+    <button class="tbtn" onclick="goPage('cats',this)">🏷️ التصنيفات</button>
   </div>
 
   <!-- ADD CIRCULAR -->
-  <div id="page-add" class="page active">
+  <div id="pg-add" class="pg on">
     <div class="card">
       <h2>➕ نشر تعميم جديد</h2>
       <label>عنوان التعميم</label>
-      <input type="text" id="circTitle" placeholder="مثال: اجتماع المعلمين">
+      <input type="text" id="cTitle" placeholder="مثال: اجتماع المعلمين">
       <label>تاريخ التعميم</label>
-      <input type="date" id="circDate">
+      <input type="date" id="cDate">
       <label>نص التعميم</label>
-      <textarea id="circBody" placeholder="اكتب نص التعميم هنا..."></textarea>
+      <textarea id="cBody" placeholder="اكتب نص التعميم هنا..."></textarea>
       <label>ملف PDF (اختياري)</label>
-      <div class="pdf-upload-area" id="pdfUploadArea" onclick="document.getElementById('pdfInput').click()">
-        <input type="file" id="pdfInput" accept=".pdf" onchange="handlePdfSelect(this)">
-        <div style="font-size:28px;margin-bottom:4px">📎</div>
+      <div class="pdf-area" id="pdfArea" onclick="document.getElementById('pdfFile').click()">
+        <input type="file" id="pdfFile" accept=".pdf" style="display:none" onchange="onPdfPick(this)">
+        <div style="font-size:30px;margin-bottom:5px">📎</div>
         <p style="font-size:13px;color:var(--muted)">اضغط لرفع ملف PDF</p>
       </div>
-      <div id="pdfPreview" style="display:none;align-items:center;gap:10px;background:#f0f4f8;border-radius:8px;padding:10px 13px;margin-bottom:11px">
-        <span style="font-size:22px">📄</span>
-        <div style="flex:1"><div id="pdfName" style="font-weight:600;font-size:13px"></div><div id="pdfSize" style="font-size:11px;color:var(--muted)"></div></div>
-        <button class="btn btn-danger" onclick="removePdf()">✕</button>
+      <div class="pdf-prev" id="pdfPrev">
+        <span style="font-size:24px">📄</span>
+        <div style="flex:1">
+          <div id="pdfFName" style="font-weight:600;font-size:13px"></div>
+          <div id="pdfFSize" style="font-size:11px;color:var(--muted)"></div>
+        </div>
+        <button class="btn bd" onclick="clearPdf()">✕ إزالة</button>
       </div>
-
-      <label>اختر المستهدفين بالتعميم</label>
-      <!-- Category filter buttons -->
-      <div id="circCatFilter" class="cat-filter-wrap"></div>
-      <!-- Staff chips grouped -->
-      <div style="display:flex;gap:7px;margin-bottom:8px">
-        <button class="btn btn-outline" style="font-size:11px;padding:5px 10px" onclick="selectAllChips()">✅ تحديد الكل</button>
-        <button class="btn btn-outline" style="font-size:11px;padding:5px 10px" onclick="clearAllChips()">❌ إلغاء الكل</button>
+      <label>المستهدفون بالتعميم</label>
+      <div class="cat-pills" id="chipFilter"></div>
+      <div style="display:flex;gap:7px;margin-bottom:9px">
+        <button class="btn bo" style="font-size:11px;padding:5px 11px" onclick="selAll()">✅ تحديد الكل</button>
+        <button class="btn bo" style="font-size:11px;padding:5px 11px" onclick="deselAll()">❌ إلغاء الكل</button>
       </div>
-      <div id="staffChipsArea"></div>
-
-      <button class="btn btn-primary btn-full" style="margin-top:4px" onclick="addCircular()">📤 نشر التعميم وإرسال واتساب</button>
+      <div id="chipsArea"></div>
+      <button class="btn bp bf" style="margin-top:6px" onclick="doPublish()">📤 نشر التعميم</button>
     </div>
   </div>
 
   <!-- CIRCULARS -->
-  <div id="page-circulars" class="page">
-    <div id="adminCircularsList"></div>
-  </div>
+  <div id="pg-circs" class="pg"><div id="circsList"></div></div>
 
   <!-- REPORTS -->
-  <div id="page-reports" class="page">
-    <div id="reportContent"></div>
-  </div>
+  <div id="pg-reports" class="pg"><div id="reportsList"></div></div>
 
-  <!-- STAFF MGMT -->
-  <div id="page-staff-mgmt" class="page">
+  <!-- STAFF -->
+  <div id="pg-staff" class="pg">
     <div class="card">
       <h2>👥 إضافة كادر جديد</h2>
       <label>الاسم الكامل</label>
-      <input type="text" id="newStaffName" placeholder="اسم المعلم أو الإداري">
-      <label>التصنيف / القسم</label>
-      <select id="newStaffCat">
-        <option value="">-- اختر التصنيف --</option>
-      </select>
+      <input type="text" id="sName" placeholder="اسم المعلم أو الإداري">
+      <label>التصنيف</label>
+      <select id="sCat"><option value="">-- اختر التصنيف --</option></select>
       <label>رقم الجوال (مع رمز الدولة بدون +)</label>
-      <input type="tel" id="newStaffPhone" placeholder="966501234567">
-      <p style="font-size:11px;color:var(--muted);margin-top:-8px;margin-bottom:11px">مثال: 966501234567</p>
-      <button class="btn btn-primary btn-full" onclick="addStaff()">+ إضافة الكادر</button>
+      <input type="tel" id="sPhone" placeholder="966501234567">
+      <p style="font-size:11px;color:var(--muted);margin-top:-9px;margin-bottom:12px">مثال: 966501234567</p>
+      <button class="btn bp bf" onclick="doAddStaff()">+ إضافة</button>
     </div>
     <div class="card">
       <h2>📋 قائمة الكوادر</h2>
-      <!-- Category filter for staff list -->
-      <div id="staffListCatFilter" class="cat-filter-wrap"></div>
-      <div id="staffListAdmin"></div>
+      <div class="cat-pills" id="staffFilter"></div>
+      <div id="staffList"></div>
     </div>
     <div class="card" style="border-right:4px solid var(--danger)">
       <h2>🔑 تغيير كلمة سر المدير</h2>
-      <input type="password" id="newPassInput" placeholder="كلمة السر الجديدة">
-      <button class="btn btn-primary" onclick="changePassword()">حفظ</button>
+      <input type="password" id="newPass" placeholder="كلمة السر الجديدة">
+      <button class="btn bp" onclick="doChangePass()">حفظ كلمة السر</button>
     </div>
   </div>
 
-  <!-- CATEGORY MGMT -->
-  <div id="page-cat-mgmt" class="page">
+  <!-- CATEGORIES -->
+  <div id="pg-cats" class="pg">
     <div class="card">
       <h2>🏷️ إضافة تصنيف جديد</h2>
-      <label>اسم التصنيف</label>
-      <input type="text" id="newCatName" placeholder="مثال: معلمو الفيزياء">
-      <button class="btn btn-primary btn-full" onclick="addCategory()">+ إضافة التصنيف</button>
+      <input type="text" id="catName" placeholder="مثال: معلمو الفيزياء">
+      <button class="btn bp bf" onclick="doAddCat()">+ إضافة التصنيف</button>
     </div>
-    <div class="card">
-      <h2>📋 التصنيفات الحالية</h2>
-      <div id="catListAdmin"></div>
-    </div>
+    <div class="card"><h2>📋 التصنيفات الحالية</h2><div id="catsList"></div></div>
   </div>
 </div>
 
 <!-- WA MODAL -->
-<div class="modal-overlay" id="waModal">
+<div class="modal-bg" id="waModal">
   <div class="modal">
     <h3>📲 إرسال التعميم عبر واتساب</h3>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:13px">اضغط زر واتساب لكل شخص لإرسال رابطه الخاص</p>
-    <div id="waLinksList"></div>
-    <button class="btn btn-outline btn-full" style="margin-top:10px" onclick="document.getElementById('waModal').classList.remove('open')">إغلاق</button>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:14px">اضغط زر واتساب لإرسال الرابط لكل شخص</p>
+    <div id="waList"></div>
+    <button class="btn bo bf" style="margin-top:10px" onclick="closeWa()">إغلاق</button>
   </div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+import {
+  getFirestore, collection, doc, getDoc, getDocs,
+  setDoc, addDoc, updateDoc, deleteDoc, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDif0Igo3ZZnLHjXpv97aQCUgXXZLZOscg",
-  authDomain: "school-a380e.firebaseapp.com",
-  projectId: "school-a380e",
-  storageBucket: "school-a380e.firebasestorage.app",
-  messagingSenderId: "851640580281",
-  appId: "1:851640580281:web:7de4dac2a2c9fa06b34368"
+// ── CONFIG ──────────────────────────────────────────────
+const FB = {
+  apiKey:"AIzaSyDif0Igo3ZZnLHjXpv97aQCUgXXZLZOscg",
+  authDomain:"school-a380e.firebaseapp.com",
+  projectId:"school-a380e",
+  storageBucket:"school-a380e.firebasestorage.app",
+  messagingSenderId:"851640580281",
+  appId:"1:851640580281:web:7de4dac2a2c9fa06b34368"
 };
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const storage = getStorage(app);
-
-// Default categories
+const CLOUDINARY_CLOUD = "dyjmxvomn";
+const CLOUDINARY_PRESET = "blfwjnmf";
 const DEFAULT_CATS = [
   'معلمو الرياضيات','معلمو العلوم','معلمو الإنجليزي',
-  'معلمو الدراسات الإسلامية','معلمو اللغة العربية','معلمو الاجتماعيات',
-  'معلمو التربية البدنية','الوكلاء','المرشدون','الإداريون',
+  'معلمو الدراسات الإسلامية','معلمو اللغة العربية',
+  'معلمو الاجتماعيات','معلمو التربية البدنية',
+  'الوكلاء','المرشدون','الإداريون',
   'الموجه الصحي','رائد النشاط','منسق الموهوبين'
 ];
+// ────────────────────────────────────────────────────────
 
-let staffList = [];
-let circulars = [];
-let categories = [];
-let selectedPdfFile = null;
-let activeStaffFilter = 'all'; // for staff list
-let activeChipFilter = 'all';  // for circular chips
+const db = getFirestore(initializeApp(FB));
 
-// ---- LOADING ----
-function showLoading(msg='جاري التحميل...'){
-  document.getElementById('loadingMsg').textContent=msg;
-  document.getElementById('loadingOverlay').classList.add('show');
+let staff = [], circs = [], cats = [];
+let pdfFile = null;
+let sfFilter = 'all', chipFilter = 'all';
+
+// ── LOADING ──
+function load(msg='جاري التحميل...'){
+  document.getElementById('loadMsg').textContent=msg;
+  document.getElementById('overlay').classList.add('on');
 }
-function hideLoading(){ document.getElementById('loadingOverlay').classList.remove('show'); }
+function unload(){ document.getElementById('overlay').classList.remove('on'); }
 
-// ---- HELPERS ----
-function getStaffLink(circId, staffName){
-  return `${location.origin}${location.pathname}?staff=${encodeURIComponent(staffName)}&circ=${circId}`;
-}
-function buildWaUrl(phone, msg){
-  const enc = encodeURIComponent(msg);
-  const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-  if(isIOS) return `whatsapp://send?phone=${phone}&text=${enc}`;
-  return `https://wa.me/${phone}?text=${enc}`;
-}
-function getStaffByName(name){ return staffList.find(s=>s.name===name); }
+// ── DIRECT LINK CHECK ──
+const P = new URLSearchParams(location.search);
+const DS = P.get('staff'), DC = P.get('circ');
 
-// ---- DIRECT LINK ----
-const params = new URLSearchParams(location.search);
-const directStaff = params.get('staff');
-const directCirc  = params.get('circ');
-
-async function start(){
-  if(directStaff && directCirc){
-    document.getElementById('loginScreen').style.display='none';
-    document.getElementById('staffDirectPage').style.display='block';
-    showLoading('جاري تحميل التعميم...');
-    try {
-      const snap = await getDoc(doc(db,'circulars',directCirc));
-      hideLoading();
+async function boot(){
+  if(DS && DC){
+    document.getElementById('loginWrap').style.display='none';
+    document.getElementById('directWrap').style.display='block';
+    load('جاري تحميل التعميم...');
+    try{
+      const snap = await getDoc(doc(db,'circulars',DC));
+      unload();
       if(!snap.exists()){
-        document.getElementById('sdContent').innerHTML='<div class="empty-state"><div class="emoji">❌</div><p>التعميم غير موجود</p></div>';
+        document.getElementById('dContent').innerHTML=`<div class="empty"><div class="e-ico">❌</div><p>التعميم غير موجود</p></div>`;
         return;
       }
-      const name = decodeURIComponent(directStaff);
-      document.getElementById('sdStaffName').textContent=`👤 ${name}`;
-      renderDirectView({id:snap.id,...snap.data()}, name);
-    } catch(e){
-      hideLoading();
-      document.getElementById('sdContent').innerHTML='<div class="empty-state"><div class="emoji">⚠️</div><p>حدث خطأ، حاول مرة أخرى</p></div>';
+      const name = decodeURIComponent(DS);
+      document.getElementById('dName').textContent=`👤 ${name}`;
+      renderDirect({id:snap.id,...snap.data()}, name);
+    }catch(e){
+      unload();
+      document.getElementById('dContent').innerHTML=`<div class="empty"><div class="e-ico">⚠️</div><p>حدث خطأ، حاول مرة أخرى</p></div>`;
     }
     return;
   }
-  // Admin init
-  showLoading('جاري الاتصال...');
-  await loadCategories();
-  const cfg = await getDoc(doc(db,'config','settings'));
-  if(!cfg.exists()) await setDoc(doc(db,'config','settings'),{adminPassword:'1234'});
-  hideLoading();
+  // admin boot
+  load('جاري الاتصال...');
+  try{
+    const cfg = await getDoc(doc(db,'config','settings'));
+    if(!cfg.exists()) await setDoc(doc(db,'config','settings'),{adminPassword:'1234'});
+    const cSnap = await getDocs(collection(db,'categories'));
+    cats = cSnap.docs.map(d=>({id:d.id,...d.data()}));
+    if(cats.length===0){
+      for(const n of DEFAULT_CATS){
+        const r = await addDoc(collection(db,'categories'),{name:n,createdAt:serverTimestamp()});
+        cats.push({id:r.id,name:n});
+      }
+    }
+    const sSnap = await getDocs(collection(db,'staff'));
+    staff = sSnap.docs.map(d=>({id:d.id,...d.data()}));
+  }catch(e){ console.error(e); }
+  unload();
 }
-start();
+boot();
 
-// ---- DIRECT VIEW ----
-function renderDirectView(circ, name){
+// ── DIRECT STAFF VIEW ──
+function renderDirect(circ, name){
   const acks=circ.acknowledgements||{};
   const key=name.replace(/\./g,'_');
   const ack=acks[name]||acks[key];
-  const el=document.getElementById('sdContent');
-  const pdfBtn=circ.pdfUrl?`<a href="${circ.pdfUrl}" target="_blank" class="btn btn-outline btn-full" style="margin-bottom:13px">📄 فتح ملف PDF التعميم</a>`:'';
+  const el=document.getElementById('dContent');
+  const pdfBtn=circ.pdfUrl?`<a href="${circ.pdfUrl}" target="_blank" class="btn bo bf" style="margin-bottom:13px">📄 فتح ملف PDF التعميم</a>`:'';
   if(ack){
     el.innerHTML=`<div class="card" style="border-right:4px solid var(--success)">
-      <div style="font-weight:800;font-size:16px;margin-bottom:3px">📋 ${circ.title}</div>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:11px">📅 ${circ.date}</div>
-      <div style="background:#f8fafc;border-radius:8px;padding:12px;font-size:14px;line-height:1.8;margin-bottom:12px;white-space:pre-wrap;border:1px solid var(--border)">${circ.body}</div>
+      <div style="font-weight:800;font-size:17px;margin-bottom:4px">📋 ${circ.title}</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:12px">📅 ${circ.date}</div>
+      <div style="background:#f8fafc;border-radius:9px;padding:13px;font-size:14px;line-height:1.8;margin-bottom:13px;white-space:pre-wrap;border:1px solid var(--border)">${circ.body}</div>
       ${pdfBtn}
-      <div class="alert alert-success">✅ تم تسجيل اطلاعك بنجاح<br><span style="font-size:11px;opacity:.8">${ack.timeFormatted||''}</span></div>
+      <div class="alert-s">✅ تم تسجيل اطلاعك بنجاح<br><span style="font-size:12px;opacity:.8">${ack.timeFormatted||''}</span></div>
     </div>`;
-  } else {
+  }else{
     el.innerHTML=`<div class="card" style="border-right:4px solid #e8a020">
-      <div style="font-weight:800;font-size:16px;margin-bottom:3px">📋 ${circ.title}</div>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:11px">📅 ${circ.date}</div>
-      <div style="background:#f8fafc;border-radius:8px;padding:12px;font-size:14px;line-height:1.8;margin-bottom:12px;white-space:pre-wrap;border:1px solid var(--border)">${circ.body}</div>
+      <div style="font-weight:800;font-size:17px;margin-bottom:4px">📋 ${circ.title}</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:12px">📅 ${circ.date}</div>
+      <div style="background:#f8fafc;border-radius:9px;padding:13px;font-size:14px;line-height:1.8;margin-bottom:13px;white-space:pre-wrap;border:1px solid var(--border)">${circ.body}</div>
       ${pdfBtn}
-      <div class="confirm-wrap" id="dWrap" onclick="toggleDCb()">
-        <div class="big-cb" id="dCb"></div>
+      <div class="conf-wrap" id="cWrap" onclick="toggleCb()">
+        <div class="conf-cb" id="confCb"></div>
         <p style="font-size:14px;font-weight:600">أؤكد اطلاعي على هذا التعميم</p>
       </div>
-      <button class="btn btn-success btn-full" id="dBtn" onclick="submitDirectAck('${circ.id}','${encodeURIComponent(name)}')" disabled style="opacity:.5">✅ تأكيد الاطلاع</button>
+      <button class="btn bs bf" id="confBtn" onclick="doAck('${circ.id}','${encodeURIComponent(name)}')" disabled style="opacity:.5">✅ تأكيد الاطلاع</button>
     </div>`;
   }
 }
 
-window.toggleDCb=()=>{
-  const cb=document.getElementById('dCb'),btn=document.getElementById('dBtn'),wrap=document.getElementById('dWrap');
-  cb.classList.toggle('checked');
-  const on=cb.classList.contains('checked');
-  btn.disabled=!on;btn.style.opacity=on?'1':'.5';
+window.toggleCb=()=>{
+  const cb=document.getElementById('confCb');
+  const btn=document.getElementById('confBtn');
+  const wrap=document.getElementById('cWrap');
+  cb.classList.toggle('on');
+  const on=cb.classList.contains('on');
+  btn.disabled=!on; btn.style.opacity=on?'1':'.5';
   wrap.style.background=on?'#d4edda':'#f0f7f4';
 };
 
-window.submitDirectAck=async(circId,enc)=>{
+window.doAck=async(circId,enc)=>{
   const name=decodeURIComponent(enc);
-  showLoading('جاري تسجيل الاطلاع...');
+  load('جاري تسجيل الاطلاع...');
   const now=new Date();
   const ack={time:now.toISOString(),timeFormatted:now.toLocaleString('ar-SA'),name};
   await updateDoc(doc(db,'circulars',circId),{[`acknowledgements.${name.replace(/\./g,'_')}`]:ack});
   const snap=await getDoc(doc(db,'circulars',circId));
-  hideLoading();
-  renderDirectView({id:snap.id,...snap.data()},name);
+  unload();
+  renderDirect({id:snap.id,...snap.data()},name);
 };
 
-// ---- LOGIN ----
-window.loginAsAdmin=async()=>{
-  const pass=document.getElementById('adminPassInput').value;
-  showLoading('جاري التحقق...');
-  const cfg=await getDoc(doc(db,'config','settings'));
-  const stored=cfg.exists()?cfg.data().adminPassword:'1234';
-  hideLoading();
-  if(pass===stored){
-    document.getElementById('adminErr').style.display='none';
-    document.getElementById('loginScreen').style.display='none';
-    document.getElementById('mainApp').style.display='block';
-    await loadAdminData();
-    showPage('add',document.querySelector('.tab-btn'));
-  } else {
-    document.getElementById('adminErr').style.display='block';
-  }
-};
-window.logout=()=>{
-  document.getElementById('loginScreen').style.display='flex';
-  document.getElementById('mainApp').style.display='none';
-  document.getElementById('adminPassInput').value='';
-};
-
-// ---- LOAD DATA ----
-async function loadCategories(){
-  const snap=await getDocs(collection(db,'categories'));
-  categories=snap.docs.map(d=>({id:d.id,...d.data()}));
-  // seed defaults if empty
-  if(categories.length===0){
-    for(const name of DEFAULT_CATS){
-      const ref=await addDoc(collection(db,'categories'),{name,createdAt:serverTimestamp()});
-      categories.push({id:ref.id,name});
+// ── LOGIN ──
+window.doLogin=async()=>{
+  const pass=document.getElementById('passInput').value.trim();
+  if(!pass) return;
+  load('جاري التحقق...');
+  try{
+    const cfg=await getDoc(doc(db,'config','settings'));
+    const stored=cfg.exists()?cfg.data().adminPassword:'1234';
+    unload();
+    if(pass===stored){
+      document.getElementById('errMsg').style.display='none';
+      document.getElementById('loginWrap').style.display='none';
+      document.getElementById('appWrap').style.display='block';
+      await loadAll();
+      goPage('add',document.querySelector('.tbtn'));
+    }else{
+      document.getElementById('errMsg').style.display='block';
     }
+  }catch(e){
+    unload();
+    alert('خطأ في الاتصال بقاعدة البيانات. تأكد من تحديث Firestore Rules.');
   }
-  categories.sort((a,b)=>a.name.localeCompare(b.name,'ar'));
-}
+};
 
-async function loadAdminData(){
-  showLoading('جاري تحميل البيانات...');
-  const [ss,cs,cats]=await Promise.all([
+window.doLogout=()=>{
+  document.getElementById('loginWrap').style.display='flex';
+  document.getElementById('appWrap').style.display='none';
+  document.getElementById('passInput').value='';
+};
+
+// ── LOAD ALL ──
+async function loadAll(){
+  load('جاري تحميل البيانات...');
+  const [ss,cs,cts]=await Promise.all([
     getDocs(collection(db,'staff')),
     getDocs(collection(db,'circulars')),
     getDocs(collection(db,'categories'))
   ]);
-  staffList=ss.docs.map(d=>({id:d.id,...d.data()}));
-  circulars=cs.docs.map(d=>({id:d.id,...d.data()}));
-  circulars.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
-  categories=cats.docs.map(d=>({id:d.id,...d.data()}));
-  categories.sort((a,b)=>a.name.localeCompare(b.name,'ar'));
-  hideLoading();
+  staff=ss.docs.map(d=>({id:d.id,...d.data()}));
+  circs=cs.docs.map(d=>({id:d.id,...d.data()}));
+  circs.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+  cats=cts.docs.map(d=>({id:d.id,...d.data()}));
+  cats.sort((a,b)=>a.name.localeCompare(b.name,'ar'));
+  unload();
 }
 
-// ---- TABS ----
-window.showPage=(page,btn)=>{
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('page-'+page).classList.add('active');
-  if(btn) btn.classList.add('active');
-  if(page==='circulars') renderAdminCirculars();
+// ── TABS ──
+window.goPage=(page,btn)=>{
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('on'));
+  document.getElementById('pg-'+page).classList.add('on');
+  if(btn) btn.classList.add('on');
+  if(page==='add') renderChips();
+  if(page==='circs') renderCircs();
   if(page==='reports') renderReports();
-  if(page==='add') renderCircChips();
-  if(page==='staff-mgmt') renderStaffMgmt();
-  if(page==='cat-mgmt') renderCatMgmt();
+  if(page==='staff') renderStaff();
+  if(page==='cats') renderCats();
 };
 
-// ---- CATEGORIES MGMT ----
-window.addCategory=async()=>{
-  const name=document.getElementById('newCatName').value.trim();
-  if(!name){alert('أدخل اسم التصنيف');return;}
-  if(categories.find(c=>c.name===name)){alert('التصنيف موجود مسبقاً');return;}
-  showLoading('جاري الإضافة...');
-  const ref=await addDoc(collection(db,'categories'),{name,createdAt:serverTimestamp()});
-  categories.push({id:ref.id,name});
-  categories.sort((a,b)=>a.name.localeCompare(b.name,'ar'));
-  document.getElementById('newCatName').value='';
-  hideLoading();
-  renderCatMgmt();
-  renderStaffMgmt();
-  renderCircChips();
+// ── PDF ──
+window.onPdfPick=(inp)=>{
+  const f=inp.files[0]; if(!f) return;
+  pdfFile=f;
+  document.getElementById('pdfFName').textContent=f.name;
+  document.getElementById('pdfFSize').textContent=(f.size/1024/1024).toFixed(2)+' MB';
+  document.getElementById('pdfPrev').style.display='flex';
+  document.getElementById('pdfArea').style.display='none';
 };
-
-window.deleteCategory=async(id,name)=>{
-  const inUse=staffList.some(s=>s.category===name);
-  if(inUse){alert(`لا يمكن حذف "${name}" لأن هناك كوادر مصنفون تحته. غيّر تصنيفهم أولاً.`);return;}
-  if(!confirm(`حذف تصنيف "${name}"؟`)) return;
-  showLoading('جاري الحذف...');
-  await deleteDoc(doc(db,'categories',id));
-  categories=categories.filter(c=>c.id!==id);
-  hideLoading();
-  renderCatMgmt();
+window.clearPdf=()=>{
+  pdfFile=null;
+  document.getElementById('pdfFile').value='';
+  document.getElementById('pdfPrev').style.display='none';
+  document.getElementById('pdfArea').style.display='block';
 };
-
-function renderCatMgmt(){
-  const el=document.getElementById('catListAdmin');
-  if(categories.length===0){el.innerHTML='<p style="color:#aaa;font-size:13px">لا توجد تصنيفات</p>';return;}
-  el.innerHTML=categories.map(c=>`
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:#f8fafc;border-radius:8px;margin-bottom:6px;border:1px solid var(--border)">
-      <span style="font-weight:600;font-size:14px">🏷️ ${c.name}</span>
-      <div style="display:flex;align-items:center;gap:7px">
-        <span style="font-size:11px;color:var(--muted)">${staffList.filter(s=>s.category===c.name).length} شخص</span>
-        <button class="btn btn-danger" onclick="deleteCategory('${c.id}','${c.name}')">حذف</button>
-      </div>
-    </div>`).join('');
-}
-
-// ---- STAFF MGMT ----
-window.addStaff=async()=>{
-  const name=document.getElementById('newStaffName').value.trim();
-  const cat=document.getElementById('newStaffCat').value;
-  const phone=document.getElementById('newStaffPhone').value.trim().replace(/\s+/g,'');
-  if(!name){alert('أدخل الاسم');return;}
-  if(!cat){alert('اختر التصنيف');return;}
-  if(staffList.find(s=>s.name===name)){alert('الاسم موجود مسبقاً');return;}
-  showLoading('جاري الإضافة...');
-  const ref=await addDoc(collection(db,'staff'),{name,category:cat,phone,createdAt:serverTimestamp()});
-  staffList.push({id:ref.id,name,category:cat,phone});
-  document.getElementById('newStaffName').value='';
-  document.getElementById('newStaffPhone').value='';
-  document.getElementById('newStaffCat').value='';
-  hideLoading();
-  renderStaffMgmt();
-  renderCircChips();
-};
-
-window.removeStaff=async(id,name)=>{
-  if(!confirm(`حذف "${name}"؟`)) return;
-  showLoading('جاري الحذف...');
-  await deleteDoc(doc(db,'staff',id));
-  staffList=staffList.filter(s=>s.id!==id);
-  hideLoading();
-  renderStaffMgmt();
-  renderCircChips();
-};
-
-window.changePassword=async()=>{
-  const val=document.getElementById('newPassInput').value.trim();
-  if(!val){alert('أدخل كلمة السر');return;}
-  await setDoc(doc(db,'config','settings'),{adminPassword:val});
-  alert('✅ تم حفظ كلمة السر الجديدة');
-  document.getElementById('newPassInput').value='';
-};
-
-function renderStaffMgmt(){
-  // Populate category select
-  const sel=document.getElementById('newStaffCat');
-  sel.innerHTML='<option value="">-- اختر التصنيف --</option>'+
-    categories.map(c=>`<option value="${c.name}">${c.name}</option>`).join('');
-
-  // Category filter buttons for staff list
-  const filterEl=document.getElementById('staffListCatFilter');
-  filterEl.innerHTML=`<button class="cat-btn ${activeStaffFilter==='all'?'active':''}" onclick="filterStaffList('all')">الكل (${staffList.length})</button>`+
-    categories.map(c=>{
-      const count=staffList.filter(s=>s.category===c.name).length;
-      if(count===0) return '';
-      return `<button class="cat-btn ${activeStaffFilter===c.name?'active':''}" onclick="filterStaffList('${c.name}')">${c.name} (${count})</button>`;
-    }).join('');
-
-  // Staff list
-  const el=document.getElementById('staffListAdmin');
-  const filtered=activeStaffFilter==='all'?staffList:staffList.filter(s=>s.category===activeStaffFilter);
-  if(filtered.length===0){el.innerHTML='<p style="color:#aaa;font-size:13px">لا يوجد كوادر في هذا التصنيف</p>';return;}
-  
-  // Group by category
-  const grouped={};
-  filtered.forEach(s=>{
-    const cat=s.category||'غير مصنف';
-    if(!grouped[cat]) grouped[cat]=[];
-    grouped[cat].push(s);
-  });
-  
-  el.innerHTML=Object.entries(grouped).map(([cat,members])=>`
-    <div style="margin-bottom:14px">
-      <div style="font-weight:800;font-size:13px;color:var(--primary);background:#e8f0fe;padding:6px 11px;border-radius:8px;margin-bottom:7px">🏷️ ${cat} (${members.length})</div>
-      ${members.map(s=>`
-        <div class="staff-card">
-          <div class="staff-card-top">
-            <span class="staff-card-name">👤 ${s.name}</span>
-            <button class="btn btn-danger" onclick="removeStaff('${s.id}','${s.name}')">حذف</button>
-          </div>
-          <div style="font-size:11px;color:var(--muted);direction:ltr">${s.phone?'📱 '+s.phone:'⚠️ لا يوجد رقم'}</div>
-        </div>`).join('')}
-    </div>`).join('');
-}
-
-window.filterStaffList=(cat)=>{
-  activeStaffFilter=cat;
-  renderStaffMgmt();
-};
-
-// ---- CIRCULAR CHIPS (with category filter) ----
-function renderCircChips(){
-  // Category filter buttons for chip area
-  const filterEl=document.getElementById('circCatFilter');
-  filterEl.innerHTML=`<button class="cat-btn ${activeChipFilter==='all'?'active':''}" onclick="filterChips('all')">🌐 الكل</button>`+
-    categories.map(c=>{
-      const count=staffList.filter(s=>s.category===c.name).length;
-      if(count===0) return '';
-      return `<button class="cat-btn ${activeChipFilter===c.name?'active':''}" onclick="filterChips('${c.name}')">${c.name} (${count})</button>`;
-    }).join('');
-
-  // Staff chips
-  const area=document.getElementById('staffChipsArea');
-  if(staffList.length===0){
-    area.innerHTML='<p style="color:#aaa;font-size:13px;margin-bottom:10px">أضف كوادر من تبويب الكوادر أولاً</p>';
-    return;
-  }
-
-  const filtered=activeChipFilter==='all'?staffList:staffList.filter(s=>s.category===activeChipFilter);
-  
-  // Group chips by category
-  const grouped={};
-  filtered.forEach(s=>{
-    const cat=s.category||'غير مصنف';
-    if(!grouped[cat]) grouped[cat]=[];
-    grouped[cat].push(s);
-  });
-
-  area.innerHTML=Object.entries(grouped).map(([cat,members])=>`
-    <div style="margin-bottom:12px">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-        <span style="font-size:12px;font-weight:700;color:var(--primary)">🏷️ ${cat}</span>
-        <div style="display:flex;gap:5px">
-          <button class="select-cat-btn" onclick="selectCatChips('${cat}')">تحديد الكل</button>
-          <button class="deselect-cat-btn" onclick="deselectCatChips('${cat}')">إلغاء الكل</button>
-        </div>
-      </div>
-      <div class="staff-chips">${members.map(s=>`<div class="chip selected" data-name="${s.name}" data-cat="${cat}" onclick="this.classList.toggle('selected')">${s.name}</div>`).join('')}</div>
-    </div>`).join('');
-}
-
-window.filterChips=(cat)=>{
-  activeChipFilter=cat;
-  renderCircChips();
-};
-window.selectAllChips=()=>document.querySelectorAll('#staffChipsArea .chip').forEach(c=>c.classList.add('selected'));
-window.clearAllChips=()=>document.querySelectorAll('#staffChipsArea .chip').forEach(c=>c.classList.remove('selected'));
-window.selectCatChips=(cat)=>document.querySelectorAll(`#staffChipsArea .chip[data-cat="${cat}"]`).forEach(c=>c.classList.add('selected'));
-window.deselectCatChips=(cat)=>document.querySelectorAll(`#staffChipsArea .chip[data-cat="${cat}"]`).forEach(c=>c.classList.remove('selected'));
-
-// ---- PDF LINK ----
-let selectedPdfFile = null;
-window.handlePdfSelect = (input) => {
-  const f = input.files[0]; if(!f) return;
-  selectedPdfFile = f;
-  document.getElementById('pdfName').textContent = f.name;
-  document.getElementById('pdfSize').textContent = (f.size/1024/1024).toFixed(2) + ' MB';
-  document.getElementById('pdfPreview').style.display = 'flex';
-  document.getElementById('pdfUploadArea').style.display = 'none';
-};
-window.removePdf = () => {
-  selectedPdfFile = null;
-  document.getElementById('pdfInput').value = '';
-  document.getElementById('pdfPreview').style.display = 'none';
-  document.getElementById('pdfUploadArea').style.display = 'block';
-};
-async function uploadToCloudinary(file) {
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('upload_preset', 'blfwjnmf');
-  formData.append('resource_type', 'raw');
-  const res = await fetch('https://api.cloudinary.com/v1_1/dyjmxvomn/raw/upload', {
-    method: 'POST', body: formData
-  });
-  const data = await res.json();
+async function uploadPdf(file){
+  const fd=new FormData();
+  fd.append('file',file);
+  fd.append('upload_preset',CLOUDINARY_PRESET);
+  fd.append('resource_type','raw');
+  const res=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/raw/upload`,{method:'POST',body:fd});
+  const data=await res.json();
   if(data.secure_url) return data.secure_url;
   throw new Error('فشل رفع الملف');
 }
 
-// ---- ADD CIRCULAR ----
-window.addCircular=async()=>{
-  const title=document.getElementById('circTitle').value.trim();
-  const date=document.getElementById('circDate').value;
-  const body=document.getElementById('circBody').value.trim();
-  const selected=[...document.querySelectorAll('#staffChipsArea .chip.selected')].map(c=>c.dataset.name);
+// ── PUBLISH CIRCULAR ──
+window.doPublish=async()=>{
+  const title=document.getElementById('cTitle').value.trim();
+  const date=document.getElementById('cDate').value;
+  const body=document.getElementById('cBody').value.trim();
+  const sel=[...document.querySelectorAll('#chipsArea .chip.on')].map(c=>c.dataset.name);
   if(!title){alert('أدخل عنوان التعميم');return;}
   if(!body){alert('أدخل نص التعميم');return;}
-  if(selected.length===0){alert('حدد شخصاً واحداً على الأقل');return;}
-
-  let pdfUrl = null;
-  if(selectedPdfFile){
-    showLoading('جاري رفع ملف PDF...');
-    try { pdfUrl = await uploadToCloudinary(selectedPdfFile); }
-    catch(e){ alert('تعذر رفع PDF، حاول مرة أخرى'); hideLoading(); return; }
+  if(!sel.length){alert('حدد شخصاً واحداً على الأقل');return;}
+  let pdfUrl=null;
+  if(pdfFile){
+    load('جاري رفع ملف PDF...');
+    try{ pdfUrl=await uploadPdf(pdfFile); }
+    catch(e){ unload(); alert('تعذر رفع PDF، حاول مرة أخرى'); return; }
   }
-  showLoading('جاري النشر...');
-  const circ={title,date:date||new Date().toISOString().split('T')[0],body,staff:selected,acknowledgements:{},pdfUrl,createdAt:serverTimestamp()};
+  load('جاري النشر...');
+  const circ={title,date:date||new Date().toISOString().split('T')[0],body,staff:sel,acknowledgements:{},pdfUrl,createdAt:serverTimestamp()};
   const ref=await addDoc(collection(db,'circulars'),circ);
   circ.id=ref.id;
-  circulars.unshift(circ);
-  document.getElementById('circTitle').value='';
-  document.getElementById('circBody').value='';
-  removePdf();
-  hideLoading();
-  showWaModal(circ);
+  circs.unshift(circ);
+  document.getElementById('cTitle').value='';
+  document.getElementById('cBody').value='';
+  clearPdf();
+  unload();
+  openWa(circ);
 };
 
-// ---- WA MODAL ----
-function showWaModal(circ){
+// ── WHATSAPP ──
+function waUrl(phone,msg){ return `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`; }
+function staffLink(circId,name){ return `${location.origin}${location.pathname}?staff=${encodeURIComponent(name)}&circ=${circId}`; }
+function getPhone(name){ return staff.find(s=>s.name===name)?.phone||''; }
+
+function openWa(circ){
   const acks=circ.acknowledgements||{};
-  const list=document.getElementById('waLinksList');
-
-  // Group by category
   const grouped={};
-  circ.staff.forEach(name=>{
-    const s=getStaffByName(name);
-    const cat=s?.category||'غير مصنف';
+  circ.staff.forEach(n=>{
+    const cat=staff.find(s=>s.name===n)?.category||'غير مصنف';
     if(!grouped[cat]) grouped[cat]=[];
-    grouped[cat].push(name);
+    grouped[cat].push(n);
   });
-
-  list.innerHTML=Object.entries(grouped).map(([cat,members])=>`
+  document.getElementById('waList').innerHTML=Object.entries(grouped).map(([cat,members])=>`
     <div style="margin-bottom:14px">
       <div style="font-weight:800;font-size:12px;color:var(--primary);background:#e8f0fe;padding:5px 10px;border-radius:7px;margin-bottom:7px">🏷️ ${cat}</div>
-      ${members.map(name=>{
-        const s=getStaffByName(name);
-        const phone=s?.phone||'';
-        const ack=acks[name]||acks[name.replace(/\./g,'_')];
-        const link=getStaffLink(circ.id,name);
-        const msg=`يرجى الاطلاع على التعميم التالي:\n\n📋 *${circ.title}*\n\n🔗 ${link}${circ.pdfUrl?'\n📎 PDF متاح داخل الرابط':''}`;
-        return `
-        <div class="wa-send-row">
+      ${members.map(n=>{
+        const phone=getPhone(n);
+        const ack=acks[n]||acks[n.replace(/\./g,'_')];
+        const link=staffLink(circ.id,n);
+        const msg=`يرجى الاطلاع على التعميم التالي:\n\n📋 *${circ.title}*\n\n🔗 ${link}${circ.pdfUrl?'\n📎 يوجد ملف PDF داخل الرابط':''}`;
+        return `<div class="wa-row">
           <div style="flex:1;min-width:0">
-            <div class="wa-send-name">👤 ${name}</div>
-            <div class="wa-send-phone">${phone?'📱 '+phone:'⚠️ لا يوجد رقم'}</div>
+            <div style="font-weight:700;font-size:13px;margin-bottom:2px">👤 ${n}</div>
+            <div style="font-size:11px;color:var(--muted);direction:ltr">${phone?'📱 '+phone:'⚠️ لا يوجد رقم'}</div>
           </div>
-          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
-            <span style="font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;background:${ack?'var(--success-bg)':'var(--danger-bg)'};color:${ack?'var(--success)':'var(--danger)'}">${ack?'✅ اطلع':'⏳ لم يطلع'}</span>
-            ${phone
-              ?`<a href="${buildWaUrl(phone,msg)}" target="_blank" class="btn btn-wa" style="font-size:12px;padding:5px 11px">📲 إرسال</a>`
-              :`<span style="font-size:11px;color:var(--danger)">أضف رقمه</span>`
-            }
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">
+            <span class="badge ${ack?'badge-s':'badge-d'}">${ack?'✅ اطلع':'⏳ لم يطلع'}</span>
+            ${phone?`<a href="${waUrl(phone,msg)}" target="_blank" class="btn bw" style="font-size:12px;padding:5px 12px">📲 إرسال</a>`:`<span style="font-size:11px;color:var(--danger)">أضف رقمه</span>`}
           </div>
         </div>`;
       }).join('')}
     </div>`).join('');
-  document.getElementById('waModal').classList.add('open');
+  document.getElementById('waModal').classList.add('on');
+}
+window.closeWa=()=>document.getElementById('waModal').classList.remove('on');
+
+window.openWaForCirc=async(id)=>{
+  load('جاري التحميل...');
+  const snap=await getDoc(doc(db,'circulars',id));
+  unload();
+  if(snap.exists()) openWa({id:snap.id,...snap.data()});
+};
+
+window.delCirc=async(id)=>{
+  if(!confirm('حذف هذا التعميم نهائياً؟')) return;
+  load('جاري الحذف...');
+  await deleteDoc(doc(db,'circulars',id));
+  circs=circs.filter(c=>c.id!==id);
+  unload(); renderCircs();
+};
+
+// ── CHIPS ──
+function renderChips(){
+  // filter pills
+  const pEl=document.getElementById('chipFilter');
+  pEl.innerHTML=`<button class="pill ${chipFilter==='all'?'on':''}" onclick="setChipFilter('all')">🌐 الكل</button>`+
+    cats.map(c=>{
+      const n=staff.filter(s=>s.category===c.name).length;
+      return n?`<button class="pill ${chipFilter===c.name?'on':''}" onclick="setChipFilter('${c.name}')">${c.name} (${n})</button>`:'';
+    }).join('');
+  // chips
+  const aEl=document.getElementById('chipsArea');
+  const filtered=chipFilter==='all'?staff:staff.filter(s=>s.category===chipFilter);
+  if(!filtered.length){aEl.innerHTML='<p style="color:#aaa;font-size:13px;margin-bottom:10px">لا يوجد كوادر في هذا التصنيف</p>';return;}
+  const grouped={};
+  filtered.forEach(s=>{ const c=s.category||'غير مصنف'; if(!grouped[c]) grouped[c]=[]; grouped[c].push(s); });
+  aEl.innerHTML=Object.entries(grouped).map(([cat,members])=>`
+    <div class="cat-section">
+      <div class="cat-hdr">
+        <span>🏷️ ${cat}</span>
+        <div class="cat-hdr-btns">
+          <button style="background:var(--primary);color:#fff" onclick="selCat('${cat}')">تحديد الكل</button>
+          <button style="background:#aaa;color:#fff" onclick="deselCat('${cat}')">إلغاء الكل</button>
+        </div>
+      </div>
+      <div class="chips">${members.map(s=>`<div class="chip on" data-name="${s.name}" data-cat="${cat}" onclick="this.classList.toggle('on')">${s.name}</div>`).join('')}</div>
+    </div>`).join('');
+}
+window.setChipFilter=(f)=>{ chipFilter=f; renderChips(); };
+window.selAll=()=>document.querySelectorAll('#chipsArea .chip').forEach(c=>c.classList.add('on'));
+window.deselAll=()=>document.querySelectorAll('#chipsArea .chip').forEach(c=>c.classList.remove('on'));
+window.selCat=(cat)=>document.querySelectorAll(`#chipsArea .chip[data-cat="${cat}"]`).forEach(c=>c.classList.add('on'));
+window.deselCat=(cat)=>document.querySelectorAll(`#chipsArea .chip[data-cat="${cat}"]`).forEach(c=>c.classList.remove('on'));
+
+// ── STAFF ──
+window.doAddStaff=async()=>{
+  const name=document.getElementById('sName').value.trim();
+  const cat=document.getElementById('sCat').value;
+  const phone=document.getElementById('sPhone').value.trim().replace(/\s+/g,'');
+  if(!name){alert('أدخل الاسم');return;}
+  if(!cat){alert('اختر التصنيف');return;}
+  if(staff.find(s=>s.name===name)){alert('الاسم موجود مسبقاً');return;}
+  load('جاري الإضافة...');
+  const ref=await addDoc(collection(db,'staff'),{name,category:cat,phone,createdAt:serverTimestamp()});
+  staff.push({id:ref.id,name,category:cat,phone});
+  document.getElementById('sName').value='';
+  document.getElementById('sPhone').value='';
+  document.getElementById('sCat').value='';
+  unload(); renderStaff();
+};
+
+window.delStaff=async(id,name)=>{
+  if(!confirm(`حذف "${name}"؟`)) return;
+  load('جاري الحذف...');
+  await deleteDoc(doc(db,'staff',id));
+  staff=staff.filter(s=>s.id!==id);
+  unload(); renderStaff();
+};
+
+window.doChangePass=async()=>{
+  const val=document.getElementById('newPass').value.trim();
+  if(!val){alert('أدخل كلمة السر');return;}
+  await setDoc(doc(db,'config','settings'),{adminPassword:val});
+  alert('✅ تم حفظ كلمة السر الجديدة');
+  document.getElementById('newPass').value='';
+};
+
+function renderStaff(){
+  // populate cat select
+  const sel=document.getElementById('sCat');
+  sel.innerHTML='<option value="">-- اختر التصنيف --</option>'+cats.map(c=>`<option value="${c.name}">${c.name}</option>`).join('');
+  // filter pills
+  const fEl=document.getElementById('staffFilter');
+  fEl.innerHTML=`<button class="pill ${sfFilter==='all'?'on':''}" onclick="setSfFilter('all')">الكل (${staff.length})</button>`+
+    cats.map(c=>{const n=staff.filter(s=>s.category===c.name).length;return n?`<button class="pill ${sfFilter===c.name?'on':''}" onclick="setSfFilter('${c.name}')">${c.name} (${n})</button>`:''}).join('');
+  // list
+  const el=document.getElementById('staffList');
+  const filtered=sfFilter==='all'?staff:staff.filter(s=>s.category===sfFilter);
+  if(!filtered.length){el.innerHTML='<p style="color:#aaa;font-size:13px">لا يوجد كوادر</p>';return;}
+  const grouped={};
+  filtered.forEach(s=>{ const c=s.category||'غير مصنف'; if(!grouped[c]) grouped[c]=[]; grouped[c].push(s); });
+  el.innerHTML=Object.entries(grouped).map(([cat,members])=>`
+    <div style="margin-bottom:14px">
+      <div style="font-weight:800;font-size:13px;color:var(--primary);background:#e8f0fe;padding:6px 11px;border-radius:8px;margin-bottom:7px">🏷️ ${cat}</div>
+      ${members.map(s=>`<div class="scard">
+        <div class="scard-top"><span style="font-weight:700;font-size:14px">👤 ${s.name}</span><button class="btn bd" onclick="delStaff('${s.id}','${s.name}')">حذف</button></div>
+        <div style="font-size:12px;color:var(--muted);direction:ltr">${s.phone?'📱 '+s.phone:'⚠️ لا يوجد رقم'}</div>
+      </div>`).join('')}
+    </div>`).join('');
+}
+window.setSfFilter=(f)=>{ sfFilter=f; renderStaff(); };
+
+// ── CATEGORIES ──
+window.doAddCat=async()=>{
+  const name=document.getElementById('catName').value.trim();
+  if(!name){alert('أدخل اسم التصنيف');return;}
+  if(cats.find(c=>c.name===name)){alert('التصنيف موجود مسبقاً');return;}
+  load('جاري الإضافة...');
+  const ref=await addDoc(collection(db,'categories'),{name,createdAt:serverTimestamp()});
+  cats.push({id:ref.id,name});
+  cats.sort((a,b)=>a.name.localeCompare(b.name,'ar'));
+  document.getElementById('catName').value='';
+  unload(); renderCats(); renderStaff();
+};
+
+window.delCat=async(id,name)=>{
+  if(staff.some(s=>s.category===name)){alert(`لا يمكن حذف "${name}" لأن هناك كوادر مصنفون تحته`);return;}
+  if(!confirm(`حذف "${name}"؟`)) return;
+  load('جاري الحذف...');
+  await deleteDoc(doc(db,'categories',id));
+  cats=cats.filter(c=>c.id!==id);
+  unload(); renderCats();
+};
+
+function renderCats(){
+  const el=document.getElementById('catsList');
+  if(!cats.length){el.innerHTML='<p style="color:#aaa;font-size:13px">لا توجد تصنيفات</p>';return;}
+  el.innerHTML=cats.map(c=>`
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 13px;background:#f8fafc;border-radius:9px;margin-bottom:7px;border:1px solid var(--border)">
+      <span style="font-weight:600;font-size:14px">🏷️ ${c.name}</span>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:12px;color:var(--muted)">${staff.filter(s=>s.category===c.name).length} شخص</span>
+        <button class="btn bd" onclick="delCat('${c.id}','${c.name}')">حذف</button>
+      </div>
+    </div>`).join('');
 }
 
-window.showWaLinksForCircular=async(id)=>{
-  showLoading('جاري التحميل...');
-  const snap=await getDoc(doc(db,'circulars',id));
-  hideLoading();
-  if(snap.exists()) showWaModal({id:snap.id,...snap.data()});
-};
-
-window.deleteCircular=async(id)=>{
-  if(!confirm('حذف هذا التعميم نهائياً؟')) return;
-  showLoading('جاري الحذف...');
-  await deleteDoc(doc(db,'circulars',id));
-  circulars=circulars.filter(c=>c.id!==id);
-  hideLoading();
-  renderAdminCirculars();
-};
-
-// ---- RENDER CIRCULARS ----
-function renderAdminCirculars(){
-  const el=document.getElementById('adminCircularsList');
-  if(circulars.length===0){el.innerHTML='<div class="empty-state"><div class="emoji">📭</div><p>لا توجد تعاميم</p></div>';return;}
-  el.innerHTML=circulars.map(c=>{
+// ── CIRCULARS ──
+function renderCircs(){
+  const el=document.getElementById('circsList');
+  if(!circs.length){el.innerHTML='<div class="empty"><div class="e-ico">📭</div><p>لا توجد تعاميم بعد</p></div>';return;}
+  el.innerHTML=circs.map(c=>{
     const acks=c.acknowledgements||{};
     const signed=c.staff.filter(s=>acks[s]||acks[s.replace(/\./g,'_')]).length;
     const total=c.staff.length;
     const pct=total?Math.round(signed/total*100):0;
     return `<div class="card" style="border-top:4px solid var(--primary)">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:7px">
-        <div>
-          <div style="font-weight:800;font-size:15px;margin-bottom:2px">${c.title}</div>
-          <div style="font-size:12px;color:var(--muted)">📅 ${c.date}${c.pdfUrl?' · 📎 PDF':''}</div>
-        </div>
-        <div style="display:flex;gap:5px;flex-wrap:wrap">
-          <button class="btn btn-wa" style="font-size:12px;padding:5px 10px" onclick="showWaLinksForCircular('${c.id}')">📲 واتساب</button>
-          <button class="btn btn-danger" onclick="deleteCircular('${c.id}')">🗑️</button>
+        <div><div style="font-weight:800;font-size:15px;margin-bottom:3px">${c.title}</div>
+        <div style="font-size:12px;color:var(--muted)">📅 ${c.date}${c.pdfUrl?' · 📎 PDF':''}</div></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="btn bw" style="font-size:12px;padding:5px 11px" onclick="openWaForCirc('${c.id}')">📲 واتساب</button>
+          <button class="btn bd" onclick="delCirc('${c.id}')">🗑️</button>
         </div>
       </div>
-      <div style="margin-top:9px">
-        <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:600;margin-bottom:3px">
-          <span>نسبة الاطلاع</span><span>${signed}/${total} (${pct}%)</span>
-        </div>
-        <div class="progress-bar-wrap"><div class="progress-bar" style="width:${pct}%"></div></div>
+      <div style="margin-top:10px">
+        <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:600;margin-bottom:3px"><span>نسبة الاطلاع</span><span>${signed}/${total} (${pct}%)</span></div>
+        <div class="pb-wrap"><div class="pb" style="width:${pct}%"></div></div>
       </div>
       <div style="margin-top:9px;display:flex;flex-wrap:wrap;gap:4px">
-        ${c.staff.map(s=>{const a=acks[s]||acks[s.replace(/\./g,'_')];return`<span style="padding:3px 8px;border-radius:20px;font-size:11px;font-weight:600;background:${a?'var(--success-bg)':'var(--danger-bg)'};color:${a?'var(--success)':'var(--danger)'}">${a?'✅':'⏳'} ${s}</span>`;}).join('')}
+        ${c.staff.map(s=>{const a=acks[s]||acks[s.replace(/\./g,'_')];return`<span class="badge ${a?'badge-s':'badge-d'}">${a?'✅':'⏳'} ${s}</span>`;}).join('')}
       </div>
     </div>`;
   }).join('');
 }
 
-// ---- RENDER REPORTS ----
+// ── REPORTS ──
 function renderReports(){
-  const el=document.getElementById('reportContent');
-  if(circulars.length===0){el.innerHTML='<div class="empty-state"><div class="emoji">📊</div><p>لا توجد تعاميم</p></div>';return;}
-  el.innerHTML=circulars.map(c=>{
+  const el=document.getElementById('reportsList');
+  if(!circs.length){el.innerHTML='<div class="empty"><div class="e-ico">📊</div><p>لا توجد تعاميم</p></div>';return;}
+  el.innerHTML=circs.map(c=>{
     const acks=c.acknowledgements||{};
     const signed=c.staff.filter(s=>acks[s]||acks[s.replace(/\./g,'_')]);
     const pending=c.staff.filter(s=>!acks[s]&&!acks[s.replace(/\./g,'_')]);
@@ -787,22 +701,22 @@ function renderReports(){
     return `<div class="card">
       <h2>📋 ${c.title}</h2>
       <div style="font-size:12px;color:var(--muted);margin-bottom:9px">📅 ${c.date} | ${signed.length}/${c.staff.length} اطلعوا (${pct}%)</div>
-      <div class="progress-bar-wrap" style="margin-bottom:13px"><div class="progress-bar" style="width:${pct}%"></div></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="pb-wrap" style="margin-bottom:14px"><div class="pb" style="width:${pct}%"></div></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
         <div>
           <div style="font-weight:700;font-size:13px;color:var(--success);margin-bottom:7px">✅ اطلعوا (${signed.length})</div>
-          ${signed.length===0?'<p style="font-size:12px;color:#aaa">لا أحد بعد</p>':signed.map(s=>{const a=acks[s]||acks[s.replace(/\./g,'_')];return`<div style="font-size:12px;font-weight:600;margin-bottom:2px">👤 ${s}</div><div style="font-size:11px;color:#aaa;margin-bottom:6px">${a?.timeFormatted||''}</div>`;}).join('')}
+          ${!signed.length?'<p style="font-size:12px;color:#aaa">لا أحد بعد</p>':signed.map(s=>{const a=acks[s]||acks[s.replace(/\./g,'_')];return`<div style="font-size:12px;font-weight:600;margin-bottom:2px">👤 ${s}</div><div style="font-size:11px;color:#aaa;margin-bottom:7px">${a?.timeFormatted||''}</div>`;}).join('')}
         </div>
         <div>
           <div style="font-weight:700;font-size:13px;color:var(--danger);margin-bottom:7px">⏳ لم يطلعوا (${pending.length})</div>
-          ${pending.length===0?'<p style="font-size:13px;color:var(--success);font-weight:600">✅ الجميع اطلعوا!</p>':pending.map(s=>`<div style="font-size:12px;margin-bottom:5px">👤 ${s}</div>`).join('')}
+          ${!pending.length?'<p style="font-size:13px;color:var(--success);font-weight:600">✅ الجميع اطلعوا!</p>':pending.map(s=>`<div style="font-size:12px;margin-bottom:5px">👤 ${s}</div>`).join('')}
         </div>
       </div>
     </div>`;
   }).join('');
 }
 
-document.getElementById('circDate').value=new Date().toISOString().split('T')[0];
+document.getElementById('cDate').value=new Date().toISOString().split('T')[0];
 </script>
 </body>
 </html>
