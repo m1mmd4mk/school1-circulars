@@ -195,7 +195,17 @@ textarea{resize:vertical;min-height:90px}
       <label>الاسم الكامل</label>
       <input type="text" id="sName" placeholder="اسم المعلم أو الإداري">
       <label>التصنيف</label>
-      <select id="sCat"><option value="">-- اختر التصنيف --</option></select>
+      <div style="display:flex;gap:7px;margin-bottom:0">
+        <select id="sCat" style="margin-bottom:12px;flex:1"><option value="">-- اختر التصنيف --</option></select>
+        <button class="btn bo" style="padding:9px 13px;margin-bottom:12px;white-space:nowrap" onclick="showAddCatInline()">+ تصنيف جديد</button>
+      </div>
+      <div id="addCatInline" style="display:none;background:#f0f4f8;border-radius:9px;padding:12px;margin-bottom:12px;border:1px solid var(--border)">
+        <label>اسم التصنيف الجديد</label>
+        <div style="display:flex;gap:7px">
+          <input type="text" id="inlineCatName" placeholder="مثال: معلمو الفيزياء" style="margin:0;flex:1">
+          <button class="btn bp" style="white-space:nowrap" onclick="doAddCatInline()">إضافة</button>
+        </div>
+      </div>
       <label>رقم الجوال (مع رمز الدولة بدون +)</label>
       <input type="tel" id="sPhone" placeholder="966501234567">
       <p style="font-size:11px;color:var(--muted);margin-top:-9px;margin-bottom:12px">مثال: 966501234567</p>
@@ -448,8 +458,8 @@ async function uploadPdf(file){
   const fd=new FormData();
   fd.append('file',file);
   fd.append('upload_preset',CLOUDINARY_PRESET);
-  fd.append('resource_type','raw');
-  const res=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/raw/upload`,{method:'POST',body:fd});
+  fd.append('resource_type','auto');
+  const res=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/auto/upload`,{method:'POST',body:fd});
   const data=await res.json();
   if(data.secure_url) return data.secure_url;
   throw new Error('فشل رفع الملف');
@@ -461,8 +471,8 @@ window.doPublish=async()=>{
   const date=document.getElementById('cDate').value;
   const body=document.getElementById('cBody').value.trim();
   const sel=[...document.querySelectorAll('#chipsArea .chip.on')].map(c=>c.dataset.name);
-  if(!title){alert('أدخل عنوان التعميم');return;}
-  if(!body){alert('أدخل نص التعميم');return;}
+  
+  
   if(!sel.length){alert('حدد شخصاً واحداً على الأقل');return;}
   let pdfUrl=null;
   if(pdfFile){
@@ -486,8 +496,15 @@ window.doPublish=async()=>{
 function waUrl(phone,msg){ return `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`; }
 function staffLink(circId,name){ return `${location.origin}${location.pathname}?staff=${encodeURIComponent(name)}&circ=${circId}`; }
 function getPhone(name){ return staff.find(s=>s.name===name)?.phone||''; }
+async function shortenUrl(url){
+  try{
+    const res = await fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(url)}`);
+    if(res.ok){ const t=await res.text(); if(t.startsWith('https://')) return t.trim(); }
+  }catch(e){}
+  return url;
+}
 
-function openWa(circ){
+async function openWa(circ){
   const acks=circ.acknowledgements||{};
   const grouped={};
   circ.staff.forEach(n=>{
@@ -501,15 +518,16 @@ function openWa(circ){
       ${members.map(n=>{
         const phone=getPhone(n);
         const ack=acks[n]||acks[n.replace(/\./g,'_')];
-        const link=staffLink(circ.id,n);
-        const msg=`يرجى الاطلاع على التعميم التالي:\n\n📋 *${circ.title}*\n\n🔗 ${link}${circ.pdfUrl?'\n📎 يوجد ملف PDF داخل الرابط':''}`;
+        const rawLink=staffLink(circ.id,n);
+        const link=await shortenUrl(rawLink);
+        const msg=`السلام عليكم ${n}،\nيرجى الاطلاع على التعميم التالي:\n\n📋 *${circ.title||'تعميم'}*\n\n🔗 ${link}${circ.pdfUrl?'\n📎 يوجد ملف PDF داخل الرابط':''}`;
         return `<div class="wa-row">
           <div style="flex:1;min-width:0">
             <div style="font-weight:700;font-size:13px;margin-bottom:2px">👤 ${n}</div>
             <div style="font-size:11px;color:var(--muted);direction:ltr">${phone?'📱 '+phone:'⚠️ لا يوجد رقم'}</div>
           </div>
           <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">
-            <span class="badge ${ack?'badge-s':'badge-d'}">${ack?'✅ اطلع':'⏳ لم يطلع'}</span>
+            <span class="badge ${ack?'badge-s':'badge-d'}">${ack?'✅ تم الاطلاع':'⏳ لم يتم الاطلاع'}</span>
             ${phone?`<a href="${waUrl(phone,msg)}" target="_blank" class="btn bw" style="font-size:12px;padding:5px 12px">📲 إرسال</a>`:`<span style="font-size:11px;color:var(--danger)">أضف رقمه</span>`}
           </div>
         </div>`;
@@ -568,6 +586,23 @@ window.selCat=(cat)=>document.querySelectorAll(`#chipsArea .chip[data-cat="${cat
 window.deselCat=(cat)=>document.querySelectorAll(`#chipsArea .chip[data-cat="${cat}"]`).forEach(c=>c.classList.remove('on'));
 
 // ── STAFF ──
+window.showAddCatInline=()=>{
+  const el=document.getElementById('addCatInline');
+  el.style.display=el.style.display==='none'?'block':'none';
+};
+window.doAddCatInline=async()=>{
+  const name=document.getElementById('inlineCatName').value.trim();
+  if(!name){alert('أدخل اسم التصنيف');return;}
+  if(cats.find(c=>c.name===name)){alert('التصنيف موجود مسبقاً');return;}
+  load('جاري الإضافة...');
+  const ref=await addDoc(collection(db,'categories'),{name,createdAt:serverTimestamp()});
+  cats.push({id:ref.id,name});
+  cats.sort((a,b)=>a.name.localeCompare(b.name,'ar'));
+  document.getElementById('inlineCatName').value='';
+  document.getElementById('addCatInline').style.display='none';
+  unload(); renderStaff();
+  alert('✅ تم إضافة التصنيف: '+name);
+};
 window.doAddStaff=async()=>{
   const name=document.getElementById('sName').value.trim();
   const cat=document.getElementById('sCat').value;
@@ -700,16 +735,16 @@ function renderReports(){
     const pct=c.staff.length?Math.round(signed.length/c.staff.length*100):0;
     return `<div class="card">
       <h2>📋 ${c.title}</h2>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:9px">📅 ${c.date} | ${signed.length}/${c.staff.length} اطلعوا (${pct}%)</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:9px">📅 ${c.date} | ${signed.length}/${c.staff.length} تم الاطلاع (${pct}%)</div>
       <div class="pb-wrap" style="margin-bottom:14px"><div class="pb" style="width:${pct}%"></div></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
         <div>
-          <div style="font-weight:700;font-size:13px;color:var(--success);margin-bottom:7px">✅ اطلعوا (${signed.length})</div>
+          <div style="font-weight:700;font-size:13px;color:var(--success);margin-bottom:7px">✅ تم الاطلاع (${signed.length})</div>
           ${!signed.length?'<p style="font-size:12px;color:#aaa">لا أحد بعد</p>':signed.map(s=>{const a=acks[s]||acks[s.replace(/\./g,'_')];return`<div style="font-size:12px;font-weight:600;margin-bottom:2px">👤 ${s}</div><div style="font-size:11px;color:#aaa;margin-bottom:7px">${a?.timeFormatted||''}</div>`;}).join('')}
         </div>
         <div>
-          <div style="font-weight:700;font-size:13px;color:var(--danger);margin-bottom:7px">⏳ لم يطلعوا (${pending.length})</div>
-          ${!pending.length?'<p style="font-size:13px;color:var(--success);font-weight:600">✅ الجميع اطلعوا!</p>':pending.map(s=>`<div style="font-size:12px;margin-bottom:5px">👤 ${s}</div>`).join('')}
+          <div style="font-weight:700;font-size:13px;color:var(--danger);margin-bottom:7px">⏳ لم يتم الاطلاع (${pending.length})</div>
+          ${!pending.length?'<p style="font-size:13px;color:var(--success);font-weight:600">✅ الجميع تم الاطلاع!</p>':pending.map(s=>`<div style="font-size:12px;margin-bottom:5px">👤 ${s}</div>`).join('')}
         </div>
       </div>
     </div>`;
