@@ -3,13 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>نظام التعاميم</title>
+<title>نظام المدرسة الشامل</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --primary:#1a4b8c;--primary2:#2d6fcc;--success:#2e7d52;--sbg:#e8f5ee;
   --danger:#c0392b;--dbg:#fdecea;--bg:#f0f4f8;--card:#fff;
-  --text:#1a2332;--muted:#6b7a8d;--border:#d1dbe8;--wa:#25d366
+  --text:#1a2332;--muted:#6b7a8d;--border:#d1dbe8;--wa:#25d366;
+  --cal:#7b3fb0;--calbg:#f1e8fa
 }
 body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 #overlay{display:none;position:fixed;inset:0;background:rgba(255,255,255,.9);z-index:999;align-items:center;justify-content:center;flex-direction:column;gap:12px}
@@ -17,67 +18,146 @@ body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:var(--bg);color:v
 .spin{width:42px;height:42px;border:4px solid #ddd;border-top-color:var(--primary);border-radius:50%;animation:sp .7s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
 #loadMsg{color:var(--primary);font-weight:700;font-size:15px}
+
+/* ===== HOME SCREEN ===== */
+#homeWrap{display:none;min-height:100vh;padding:24px 16px}
+.home-hdr{text-align:center;margin-bottom:30px;margin-top:10px}
+.home-hdr .ico{font-size:48px;margin-bottom:8px}
+.home-hdr h1{font-size:22px;font-weight:800;color:var(--primary)}
+.home-hdr p{font-size:13px;color:var(--muted);margin-top:4px}
+.home-grid{display:flex;flex-direction:column;gap:16px;max-width:420px;margin:0 auto}
+.home-card{background:#fff;border-radius:20px;padding:28px 20px;box-shadow:0 4px 20px rgba(0,0,0,.08);cursor:pointer;transition:.2s;border:2px solid transparent;text-align:center}
+.home-card:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.12)}
+.home-card .h-ico{font-size:44px;margin-bottom:10px}
+.home-card h2{font-size:18px;font-weight:800;margin-bottom:5px}
+.home-card p{font-size:13px;color:var(--muted)}
+.home-card.circ{border-color:var(--primary)}
+.home-card.circ h2{color:var(--primary)}
+.home-card.cal{border-color:var(--cal)}
+.home-card.cal h2{color:var(--cal)}
+.home-logout{display:block;text-align:center;margin-top:24px;color:var(--muted);font-size:13px;cursor:pointer;text-decoration:underline}
+
+/* ===== LOGIN ===== */
 #loginWrap{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
 .lbox{background:#fff;border-radius:20px;padding:40px 30px;width:100%;max-width:360px;box-shadow:0 8px 32px rgba(0,0,0,.12);text-align:center}
 .lbox .ico{font-size:56px;margin-bottom:12px}
 .lbox h1{font-size:22px;font-weight:800;color:var(--primary);margin-bottom:6px}
 .lbox p{color:var(--muted);font-size:14px;margin-bottom:28px}
+
+/* ===== HEADER ===== */
 header{background:var(--primary);color:#fff;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+header.cal-theme{background:var(--cal)}
+header .hleft{display:flex;align-items:center;gap:10px}
+.back-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:34px;height:34px;border-radius:8px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
 header h1{font-size:17px;font-weight:700}
 header p{font-size:11px;opacity:.8;margin-top:2px}
 .hbtn{background:rgba(255,255,255,.2);border:none;color:#fff;padding:7px 14px;border-radius:8px;cursor:pointer;font-size:13px;font-family:inherit;font-weight:600}
+
+/* ===== TABS ===== */
 .tabs{display:flex;background:#fff;border-bottom:2px solid var(--border);padding:0 10px;overflow-x:auto}
 .tbtn{padding:13px 15px;border:none;background:none;font-size:13px;font-family:inherit;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;font-weight:600;transition:.2s}
 .tbtn.on{color:var(--primary);border-bottom-color:var(--primary)}
+.tbtn.cal-on{color:var(--cal);border-bottom-color:var(--cal)}
+
+/* ===== PAGE ===== */
 .pg{display:none;padding:16px;max-width:700px;margin:0 auto}
 .pg.on{display:block}
+
+/* ===== CARD ===== */
 .card{background:#fff;border-radius:14px;padding:18px;box-shadow:0 2px 12px rgba(0,0,0,.07);margin-bottom:14px}
 .card h2{font-size:15px;font-weight:700;color:var(--primary);margin-bottom:14px}
+.card h2.cal-h{color:var(--cal)}
+
+/* ===== FORM ===== */
 label{display:block;font-size:13px;font-weight:600;margin-bottom:5px;color:var(--text)}
 input,textarea,select{width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:9px;font-size:14px;font-family:inherit;color:var(--text);background:#fff;margin-bottom:12px;direction:rtl;transition:.2s}
 input[type=tel]{direction:ltr;text-align:left}
 input:focus,textarea:focus,select:focus{outline:none;border-color:var(--primary2)}
 textarea{resize:vertical;min-height:90px}
+
+/* ===== BUTTONS ===== */
 .btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border:none;border-radius:9px;font-size:14px;font-family:inherit;font-weight:600;cursor:pointer;transition:.15s;text-decoration:none}
 .bp{background:var(--primary);color:#fff}.bp:hover{background:var(--primary2)}
+.bc{background:var(--cal);color:#fff}.bc:hover{background:#8e4fc7}
 .bs{background:var(--success);color:#fff}
 .bd{background:var(--danger);color:#fff;font-size:12px;padding:6px 12px}
 .bo{background:#fff;color:var(--primary);border:1.5px solid var(--primary)}
+.boc{background:#fff;color:var(--cal);border:1.5px solid var(--cal)}
 .bw{background:var(--wa);color:#fff}
 .bf{width:100%;justify-content:center}
+
+/* ===== CHIPS / PILLS ===== */
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
 .chip{padding:6px 13px;border-radius:20px;font-size:12px;font-weight:600;border:1.5px solid var(--border);background:#fff;cursor:pointer;transition:.15s}
 .chip.on{background:var(--primary);color:#fff;border-color:var(--primary)}
+.chip.on.cal-chip{background:var(--cal);border-color:var(--cal)}
+.pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:13px}
+.pill{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;border:1.5px solid var(--border);background:#fff;cursor:pointer;white-space:nowrap;transition:.15s}
+.pill.on{background:var(--primary);color:#fff;border-color:var(--primary)}
+.pill.on.cal-pill{background:var(--cal);border-color:var(--cal)}
+
+/* ===== PROGRESS ===== */
 .pb-wrap{background:var(--border);border-radius:10px;height:7px;overflow:hidden;margin-top:5px}
 .pb{height:100%;background:var(--success);border-radius:10px;transition:width .4s}
+
+/* ===== BADGE ===== */
 .badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
 .bs2{background:var(--sbg);color:var(--success)}
 .bd2{background:var(--dbg);color:var(--danger)}
 .alert-s{background:var(--sbg);color:var(--success);padding:11px 14px;border-radius:9px;font-size:14px;font-weight:500;margin-bottom:12px}
+
+/* ===== MODAL ===== */
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:center;justify-content:center;padding:16px}
 .modal-bg.on{display:flex}
-.modal{background:#fff;border-radius:16px;padding:22px;width:100%;max-width:500px;max-height:92vh;overflow-y:auto}
+.modal{background:#fff;border-radius:16px;padding:22px;width:100%;max-width:520px;max-height:92vh;overflow-y:auto}
 .modal h3{font-size:16px;font-weight:700;color:var(--primary);margin-bottom:14px}
+.modal h3.cal-h{color:var(--cal)}
+
+/* ===== CONFIRM ===== */
 .conf-wrap{display:flex;align-items:center;gap:12px;background:#f0f7f4;border:2px solid var(--success);border-radius:10px;padding:14px;margin-bottom:13px;cursor:pointer}
 .conf-cb{width:27px;height:27px;border:2.5px solid var(--success);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;background:#fff;transition:.2s}
 .conf-cb.on{background:var(--success);color:#fff}
-.pdf-area{border:2px dashed var(--border);border-radius:10px;padding:20px;text-align:center;cursor:pointer;margin-bottom:12px;background:#fafcff;transition:.2s}
-.pdf-area:hover{border-color:var(--primary2)}
-.pdf-prev{display:none;align-items:center;gap:10px;background:#f0f4f8;border-radius:9px;padding:10px 13px;margin-bottom:12px}
+
+/* ===== FILE UPLOAD ===== */
+.file-area{border:2px dashed var(--border);border-radius:10px;padding:20px;text-align:center;cursor:pointer;margin-bottom:12px;background:#fafcff;transition:.2s}
+.file-area:hover{border-color:var(--primary2)}
+.file-area.cal-area:hover{border-color:var(--cal)}
+.file-prev{display:flex;align-items:center;gap:10px;background:#f0f4f8;border-radius:9px;padding:10px 13px;margin-bottom:8px}
+
+/* ===== CAT SECTION ===== */
 .cat-hdr{display:flex;align-items:center;justify-content:space-between;background:#e8f0fe;padding:6px 11px;border-radius:8px;margin-bottom:7px}
+.cat-hdr.cal-cat{background:var(--calbg)}
 .cat-hdr span{font-size:13px;font-weight:700;color:var(--primary)}
+.cat-hdr.cal-cat span{color:var(--cal)}
 .cat-hdr-btns button{font-size:11px;padding:3px 9px;border-radius:6px;border:none;cursor:pointer;font-family:inherit;font-weight:600}
+
+/* ===== STAFF DIRECT ===== */
 #directWrap{display:none;min-height:100vh;background:var(--bg)}
 .d-hdr{background:var(--primary);color:#fff;padding:20px;text-align:center}
 .d-hdr h1{font-size:19px;font-weight:800}
 .d-hdr p{font-size:14px;opacity:.85;margin-top:4px}
-.pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:13px}
-.pill{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;border:1.5px solid var(--border);background:#fff;cursor:pointer;white-space:nowrap;transition:.15s}
-.pill.on{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+/* ===== STAFF CARD ===== */
 .scard{background:#f8fafc;border-radius:10px;padding:12px;margin-bottom:8px;border:1px solid var(--border)}
 .wa-row{display:flex;align-items:center;justify-content:space-between;padding:10px 13px;background:#f0fff5;border-radius:9px;margin-bottom:7px;border:1px solid #b2dfc4;flex-wrap:wrap;gap:7px}
 .empty{text-align:center;padding:36px 20px;color:var(--muted)}
 .empty .ei{font-size:44px;margin-bottom:10px}
+
+/* ===== CALENDAR EVENT CARD ===== */
+.event-card{background:#fff;border-radius:14px;padding:16px;box-shadow:0 2px 12px rgba(0,0,0,.07);margin-bottom:12px;border-right:5px solid var(--cal)}
+.event-card.past{opacity:.65;border-right-color:#bbb}
+.event-date-badge{display:inline-flex;align-items:center;gap:6px;background:var(--calbg);color:var(--cal);padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700;margin-bottom:8px}
+.event-title{font-size:16px;font-weight:800;margin-bottom:6px}
+.event-resp{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+.event-resp-tag{background:#e8f0fe;color:var(--primary);padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.event-notes{font-size:13px;color:var(--text);line-height:1.7;background:#f8fafc;border-radius:8px;padding:10px 12px;margin-bottom:10px;white-space:pre-wrap}
+.event-files{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:10px}
+.event-file-chip{display:flex;align-items:center;gap:5px;background:#f0f4f8;border:1px solid var(--border);border-radius:8px;padding:6px 11px;font-size:12px;text-decoration:none;color:var(--text)}
+.event-msgs{margin-bottom:8px}
+.event-msg-box{background:#f0fff5;border:1px solid #b2dfc4;border-radius:8px;padding:10px 12px;margin-bottom:7px;font-size:13px;white-space:pre-wrap;position:relative}
+.event-msg-copybtn{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:4px 10px;border-radius:6px;background:var(--wa);color:#fff;border:none;cursor:pointer;font-family:inherit;font-weight:600;margin-top:6px}
+.event-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+
 @media(max-width:480px){header h1{font-size:15px}.tbtn{font-size:12px;padding:11px 10px}}
 </style>
 </head>
@@ -85,7 +165,7 @@ textarea{resize:vertical;min-height:90px}
 
 <div id="overlay"><div class="spin"></div><p id="loadMsg">جاري التحميل...</p></div>
 
-<!-- STAFF DIRECT -->
+<!-- ===== STAFF DIRECT (circular ack via WhatsApp link) ===== -->
 <div id="directWrap">
   <div class="d-hdr">
     <div style="font-size:40px;margin-bottom:8px">📋</div>
@@ -95,11 +175,11 @@ textarea{resize:vertical;min-height:90px}
   <div style="padding:16px;max-width:620px;margin:0 auto" id="dContent"></div>
 </div>
 
-<!-- LOGIN -->
+<!-- ===== LOGIN ===== -->
 <div id="loginWrap">
   <div class="lbox">
-    <div class="ico">📋</div>
-    <h1>نظام التعاميم</h1>
+    <div class="ico">🏫</div>
+    <h1>نظام المدرسة الشامل</h1>
     <p>بوابة المدير</p>
     <label>كلمة السر</label>
     <input type="password" id="passInput" placeholder="أدخل كلمة السر" onkeydown="if(event.key==='Enter')doLogin()">
@@ -108,10 +188,35 @@ textarea{resize:vertical;min-height:90px}
   </div>
 </div>
 
-<!-- ADMIN APP -->
+<!-- ===== HOME SCREEN (after login) ===== -->
+<div id="homeWrap">
+  <div class="home-hdr">
+    <div class="ico">🏫</div>
+    <h1>نظام المدرسة الشامل</h1>
+    <p>اختر النظام الذي تريد الدخول إليه</p>
+  </div>
+  <div class="home-grid">
+    <div class="home-card circ" onclick="enterModule('circ')">
+      <div class="h-ico">📋</div>
+      <h2>نظام التعاميم</h2>
+      <p>نشر التعاميم وتتبع الاطلاع والتوقيع الإلكتروني</p>
+    </div>
+    <div class="home-card cal" onclick="enterModule('cal')">
+      <div class="h-ico">📅</div>
+      <h2>التقويم السنوي</h2>
+      <p>الفعاليات والمناسبات والمسؤولين عنها طوال السنة</p>
+    </div>
+  </div>
+  <div class="home-logout" onclick="doLogout()">🚪 تسجيل الخروج</div>
+</div>
+
+<!-- ===== CIRCULARS MODULE ===== -->
 <div id="appWrap" style="display:none">
   <header>
-    <div><h1>📋 نظام التعاميم الإلكترونية</h1><p>لوحة تحكم المدير</p></div>
+    <div class="hleft">
+      <button class="back-btn" onclick="goHome()">→</button>
+      <div><h1>📋 نظام التعاميم الإلكترونية</h1><p>لوحة تحكم المدير</p></div>
+    </div>
     <button class="hbtn" onclick="doLogout()">خروج</button>
   </header>
   <div class="tabs">
@@ -133,12 +238,12 @@ textarea{resize:vertical;min-height:90px}
       <label>نص التعميم (اختياري)</label>
       <textarea id="cBody" placeholder="اكتب نص التعميم هنا..."></textarea>
       <label>ملف PDF (اختياري)</label>
-      <div class="pdf-area" id="pdfArea" onclick="document.getElementById('pdfFile').click()">
+      <div class="file-area" id="pdfArea" onclick="document.getElementById('pdfFile').click()">
         <input type="file" id="pdfFile" accept=".pdf" style="display:none" onchange="onPdfPick(this)">
         <div style="font-size:30px;margin-bottom:5px">📎</div>
         <p style="font-size:13px;color:var(--muted)">اضغط لرفع ملف PDF</p>
       </div>
-      <div class="pdf-prev" id="pdfPrev">
+      <div class="file-prev" id="pdfPrev" style="display:none">
         <span style="font-size:24px">📄</span>
         <div style="flex:1">
           <div id="pdfFName" style="font-weight:600;font-size:13px"></div>
@@ -157,7 +262,7 @@ textarea{resize:vertical;min-height:90px}
     </div>
   </div>
 
-  <!-- CIRCULARS -->
+  <!-- CIRCULARS LIST -->
   <div id="pg-circs" class="pg"><div id="circsList"></div></div>
 
   <!-- REPORTS -->
@@ -209,7 +314,105 @@ textarea{resize:vertical;min-height:90px}
   </div>
 </div>
 
-<!-- WA MODAL -->
+<!-- ===== CALENDAR MODULE ===== -->
+<div id="calWrap" style="display:none">
+  <header class="cal-theme">
+    <div class="hleft">
+      <button class="back-btn" onclick="goHome()">→</button>
+      <div><h1>📅 التقويم السنوي للمدرسة</h1><p>الفعاليات والمناسبات</p></div>
+    </div>
+    <button class="hbtn" onclick="doLogout()">خروج</button>
+  </header>
+  <div class="tabs">
+    <button class="tbtn cal-on on" onclick="goCalPage('events',this)">📅 المناسبات</button>
+    <button class="tbtn" onclick="goCalPage('addEvent',this)">➕ إضافة مناسبة</button>
+    <button class="tbtn" onclick="goCalPage('calStaff',this)">👥 الكوادر</button>
+    <button class="tbtn" onclick="goCalPage('calCats',this)">🏷️ التصنيفات</button>
+  </div>
+
+  <!-- EVENTS LIST -->
+  <div id="cpg-events" class="pg on">
+    <div class="card" style="margin-bottom:12px">
+      <div class="pills" id="eventFilterPills"></div>
+    </div>
+    <div id="eventsList"></div>
+  </div>
+
+  <!-- ADD EVENT -->
+  <div id="cpg-addEvent" class="pg">
+    <div class="card">
+      <h2 class="cal-h">➕ إضافة مناسبة جديدة</h2>
+      <label>عنوان المناسبة</label>
+      <input type="text" id="evTitle" placeholder="مثال: اليوم الوطني">
+      <label>تاريخ المناسبة</label>
+      <input type="date" id="evDate">
+      <label>ملاحظات / تفاصيل (اختياري)</label>
+      <textarea id="evNotes" placeholder="تفاصيل المناسبة، الترتيبات، أي ملاحظات..."></textarea>
+
+      <label>المسؤولون عن هذه المناسبة</label>
+      <div class="pills" id="evChipFilter"></div>
+      <div style="display:flex;gap:7px;margin-bottom:9px">
+        <button class="btn boc" style="font-size:11px;padding:5px 11px" onclick="evSelAll()">✅ تحديد الكل</button>
+        <button class="btn boc" style="font-size:11px;padding:5px 11px" onclick="evDeselAll()">❌ إلغاء الكل</button>
+      </div>
+      <div id="evChipsArea"></div>
+
+      <label style="margin-top:6px">مرفقات (PDF / Word) — اختياري</label>
+      <div class="file-area cal-area" id="evFileArea" onclick="document.getElementById('evFileInput').click()">
+        <input type="file" id="evFileInput" accept=".pdf,.doc,.docx" style="display:none" onchange="onEvFilePick(this)">
+        <div style="font-size:28px;margin-bottom:4px">📎</div>
+        <p style="font-size:13px;color:var(--muted)">اضغط لرفع ملف PDF أو Word (يمكن رفع أكثر من ملف)</p>
+      </div>
+      <div id="evFilesPreview"></div>
+
+      <label style="margin-top:6px">رسائل جاهزة للجروبات (اختياري)</label>
+      <p style="font-size:11px;color:var(--muted);margin-top:-8px;margin-bottom:9px">اكتب رسالة جاهزة تنسخها وقت المناسبة وترسلها في جروب واتساب</p>
+      <div id="evMsgsArea"></div>
+      <button class="btn boc" style="font-size:12px;padding:7px 14px;margin-bottom:14px" onclick="addMsgField()">+ إضافة رسالة جديدة</button>
+
+      <button class="btn bc bf" onclick="doSaveEvent()">💾 حفظ المناسبة</button>
+    </div>
+  </div>
+
+  <!-- CALENDAR STAFF -->
+  <div id="cpg-calStaff" class="pg">
+    <div class="card">
+      <h2 class="cal-h">👥 إضافة شخص جديد</h2>
+      <label>الاسم الكامل</label>
+      <input type="text" id="csName" placeholder="اسم الشخص">
+      <label>التصنيف</label>
+      <div style="display:flex;gap:7px">
+        <select id="csCat" style="flex:1;margin-bottom:12px"><option value="">-- اختر التصنيف --</option></select>
+        <button class="btn boc" style="padding:9px 13px;margin-bottom:12px;white-space:nowrap;height:fit-content" onclick="toggleNewCalCat()">+ تصنيف جديد</button>
+      </div>
+      <div id="newCalCatBox" style="display:none;background:#f1e8fa;border-radius:9px;padding:12px;margin-bottom:12px;border:1px solid var(--border)">
+        <label>اسم التصنيف الجديد</label>
+        <div style="display:flex;gap:7px">
+          <input type="text" id="newCalCatName" placeholder="مثال: الطلاب القادة" style="margin:0;flex:1">
+          <button class="btn bc" style="white-space:nowrap" onclick="doAddCalCatQuick()">إضافة</button>
+        </div>
+      </div>
+      <button class="btn bc bf" onclick="doAddCalStaff()">+ إضافة</button>
+    </div>
+    <div class="card">
+      <h2 class="cal-h">📋 القائمة الحالية</h2>
+      <div class="pills" id="calStaffFilter"></div>
+      <div id="calStaffList"></div>
+    </div>
+  </div>
+
+  <!-- CALENDAR CATEGORIES -->
+  <div id="cpg-calCats" class="pg">
+    <div class="card">
+      <h2 class="cal-h">🏷️ إضافة تصنيف جديد</h2>
+      <input type="text" id="calCatName" placeholder="مثال: الطلاب القادة">
+      <button class="btn bc bf" onclick="doAddCalCat()">+ إضافة التصنيف</button>
+    </div>
+    <div class="card"><h2 class="cal-h">📋 التصنيفات الحالية</h2><div id="calCatsList"></div></div>
+  </div>
+</div>
+
+<!-- ===== WA MODAL (circulars) ===== -->
 <div class="modal-bg" id="waModal">
   <div class="modal">
     <h3>📲 إرسال التعميم عبر واتساب</h3>
@@ -217,6 +420,11 @@ textarea{resize:vertical;min-height:90px}
     <div id="waList"></div>
     <button class="btn bo bf" style="margin-top:10px" onclick="document.getElementById('waModal').classList.remove('on')">إغلاق</button>
   </div>
+</div>
+
+<!-- ===== EVENT DETAIL MODAL (calendar) ===== -->
+<div class="modal-bg" id="eventModal">
+  <div class="modal" id="eventModalBody"></div>
 </div>
 
 <script type="module">
@@ -236,6 +444,7 @@ const FB_CONFIG = {
 };
 const CLD_CLOUD  = "dyjmxvomn";
 const CLD_PRESET = "blfwjnmf";
+
 const DEFAULT_CATS = [
   'معلمو الرياضيات','معلمو العلوم','معلمو الإنجليزي',
   'معلمو الدراسات الإسلامية','معلمو اللغة العربية',
@@ -243,11 +452,22 @@ const DEFAULT_CATS = [
   'الوكلاء','المرشدون','الإداريون',
   'الموجه الصحي','رائد النشاط','منسق الموهوبين'
 ];
+const DEFAULT_CAL_CATS = [
+  'المعلمون','الوكلاء','المرشدون','الطلاب','المدير',
+  'الإداريون','منسق الموهوبين','رائد النشاط'
+];
 
 const db = getFirestore(initializeApp(FB_CONFIG));
 
+// ── STATE: circulars module ──
 let staff=[], circs=[], cats=[];
 let pdfFile=null, sfFilter='all', chipFilter='all';
+
+// ── STATE: calendar module ──
+let calStaff=[], events=[], calCats=[];
+let calSfFilter='all', evChipFilter='all', eventFilterMode='upcoming';
+let evFiles=[]; // {file, name, size} pending upload
+let evMsgCount=0;
 
 // ── HELPERS ──
 function load(msg='جاري التحميل...'){
@@ -261,9 +481,14 @@ function staffLink(circId,name){
 }
 function getPhone(name){ return staff.find(s=>s.name===name)?.phone||''; }
 
-async function shortenUrl(url){
-  // تم إلغاء الاختصار الخارجي - الرابط يذهب مباشرة لموقعك بدون طرف ثالث
-  return url;
+async function uploadFileToCloudinary(file){
+  const fd=new FormData();
+  fd.append('file', file);
+  fd.append('upload_preset', CLD_PRESET);
+  const r = await fetch(`https://api.cloudinary.com/v1_1/${CLD_CLOUD}/image/upload`,{method:'POST',body:fd});
+  const d = await r.json();
+  if(d.secure_url) return d.secure_url.replace('/upload/', '/upload/fl_attachment/');
+  throw new Error('فشل رفع الملف');
 }
 
 async function recordLinkOpened(circId, name){
@@ -274,19 +499,6 @@ async function recordLinkOpened(circId, name){
       [`linkOpened.${key}`]: { time: now.toISOString(), timeFormatted: now.toLocaleString('ar-SA') }
     });
   }catch(e){ console.error('recordLinkOpened error', e); }
-}
-
-async function uploadPdf(file){
-  const fd=new FormData();
-  fd.append('file', file);
-  fd.append('upload_preset', CLD_PRESET);
-  const r = await fetch(`https://api.cloudinary.com/v1_1/${CLD_CLOUD}/image/upload`,{method:'POST',body:fd});
-  const d = await r.json();
-  if(d.secure_url){
-    // نضيف fl_attachment لضمان فتح/تحميل الملف بشكل صحيح في كل المتصفحات
-    return d.secure_url.replace('/upload/', '/upload/fl_attachment/');
-  }
-  throw new Error('فشل رفع PDF');
 }
 
 // ── BOOT ──
@@ -308,7 +520,6 @@ async function boot(){
       const name=decodeURIComponent(DS);
       document.getElementById('dName').textContent=`👤 ${name}`;
       renderDirect({id:snap.id,...snap.data()}, name);
-      // تسجيل أن الرابط تم فتحه (مستقل عن تأكيد الاطلاع)
       recordLinkOpened(DC, name);
     }catch(e){
       unload();
@@ -316,28 +527,17 @@ async function boot(){
     }
     return;
   }
-  // admin init
+  // admin init - just check password exists, don't load data yet
   load('جاري الاتصال...');
   try{
     const cfg=await getDoc(doc(db,'config','settings'));
     if(!cfg.exists()) await setDoc(doc(db,'config','settings'),{adminPassword:'1234'});
-    const cSnap=await getDocs(collection(db,'categories'));
-    cats=cSnap.docs.map(d=>({id:d.id,...d.data()}));
-    if(cats.length===0){
-      for(const n of DEFAULT_CATS){
-        const r=await addDoc(collection(db,'categories'),{name:n,createdAt:serverTimestamp()});
-        cats.push({id:r.id,name:n});
-      }
-    }
-    cats.sort((a,b)=>a.name.localeCompare(b.name,'ar'));
-    const sSnap=await getDocs(collection(db,'staff'));
-    staff=sSnap.docs.map(d=>({id:d.id,...d.data()}));
   }catch(e){ console.error('boot error',e); }
   unload();
 }
 boot();
 
-// ── DIRECT STAFF VIEW ──
+// ── DIRECT STAFF VIEW (circular acknowledgment) ──
 function renderDirect(circ, name){
   const acks=circ.acknowledgements||{};
   const key=name.replace(/\./g,'_');
@@ -387,7 +587,7 @@ window.doAck=async(circId,enc)=>{
   renderDirect({id:snap.id,...snap.data()},name);
 };
 
-// ── LOGIN ──
+// ── LOGIN / LOGOUT / NAVIGATION ──
 window.doLogin=async()=>{
   const pass=document.getElementById('passInput').value.trim();
   if(!pass){ alert('أدخل كلمة السر'); return; }
@@ -399,9 +599,7 @@ window.doLogin=async()=>{
       unload();
       document.getElementById('errMsg').style.display='none';
       document.getElementById('loginWrap').style.display='none';
-      document.getElementById('appWrap').style.display='block';
-      await loadAll();
-      goPage('add',document.querySelector('.tbtn'));
+      document.getElementById('homeWrap').style.display='block';
     }else{
       unload();
       document.getElementById('errMsg').style.display='block';
@@ -415,30 +613,61 @@ window.doLogin=async()=>{
 
 window.doLogout=()=>{
   document.getElementById('loginWrap').style.display='flex';
+  document.getElementById('homeWrap').style.display='none';
   document.getElementById('appWrap').style.display='none';
+  document.getElementById('calWrap').style.display='none';
   document.getElementById('passInput').value='';
 };
 
-// ── LOAD ALL ──
-async function loadAll(){
+window.goHome=()=>{
+  document.getElementById('appWrap').style.display='none';
+  document.getElementById('calWrap').style.display='none';
+  document.getElementById('homeWrap').style.display='block';
+};
+
+window.enterModule=async(mod)=>{
+  document.getElementById('homeWrap').style.display='none';
+  if(mod==='circ'){
+    document.getElementById('appWrap').style.display='block';
+    await loadCircData();
+    goPage('add',document.querySelector('#appWrap .tbtn'));
+  }else{
+    document.getElementById('calWrap').style.display='block';
+    await loadCalData();
+    goCalPage('events',document.querySelector('#calWrap .tbtn'));
+  }
+};
+
+/* =====================================================================
+   CIRCULARS MODULE
+   ===================================================================== */
+
+async function loadCircData(){
   load('جاري تحميل البيانات...');
-  const [ss,cs,cts]=await Promise.all([
-    getDocs(collection(db,'staff')),
-    getDocs(collection(db,'circulars')),
-    getDocs(collection(db,'categories'))
-  ]);
-  staff=ss.docs.map(d=>({id:d.id,...d.data()}));
-  circs=cs.docs.map(d=>({id:d.id,...d.data()}));
-  circs.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
-  cats=cts.docs.map(d=>({id:d.id,...d.data()}));
-  cats.sort((a,b)=>a.name.localeCompare(b.name,'ar'));
+  try{
+    const cSnap=await getDocs(collection(db,'categories'));
+    cats=cSnap.docs.map(d=>({id:d.id,...d.data()}));
+    if(cats.length===0){
+      for(const n of DEFAULT_CATS){
+        const r=await addDoc(collection(db,'categories'),{name:n,createdAt:serverTimestamp()});
+        cats.push({id:r.id,name:n});
+      }
+    }
+    cats.sort((a,b)=>a.name.localeCompare(b.name,'ar'));
+    const [ss,cs]=await Promise.all([
+      getDocs(collection(db,'staff')),
+      getDocs(collection(db,'circulars'))
+    ]);
+    staff=ss.docs.map(d=>({id:d.id,...d.data()}));
+    circs=cs.docs.map(d=>({id:d.id,...d.data()}));
+    circs.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+  }catch(e){ console.error(e); }
   unload();
 }
 
-// ── TABS ──
 window.goPage=(page,btn)=>{
-  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('#appWrap .pg').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('#appWrap .tbtn').forEach(b=>b.classList.remove('on'));
   document.getElementById('pg-'+page).classList.add('on');
   if(btn) btn.classList.add('on');
   if(page==='add')     renderChips();
@@ -448,7 +677,7 @@ window.goPage=(page,btn)=>{
   if(page==='cats')    renderCats();
 };
 
-// ── PDF ──
+// PDF (circulars)
 window.onPdfPick=(inp)=>{
   const f=inp.files[0]; if(!f) return;
   pdfFile=f;
@@ -464,7 +693,6 @@ window.clearPdf=()=>{
   document.getElementById('pdfArea').style.display='block';
 };
 
-// ── PUBLISH ──
 window.doPublish=async()=>{
   const title=document.getElementById('cTitle').value.trim();
   const date=document.getElementById('cDate').value;
@@ -474,7 +702,7 @@ window.doPublish=async()=>{
   let pdfUrl=null;
   if(pdfFile){
     load('جاري رفع ملف PDF...');
-    try{ pdfUrl=await uploadPdf(pdfFile); }
+    try{ pdfUrl=await uploadFileToCloudinary(pdfFile); }
     catch(e){ unload(); alert('تعذر رفع PDF، حاول مرة أخرى'); return; }
   }
   load('جاري النشر...');
@@ -494,20 +722,17 @@ window.doPublish=async()=>{
   openWa(circ);
 };
 
-// ── WHATSAPP ──
 async function openWa(circ){
   load('جاري تجهيز الروابط...');
   const acks=circ.acknowledgements||{};
+  const opens=circ.linkOpened||{};
   const grouped={};
   circ.staff.forEach(n=>{
     const cat=staff.find(s=>s.name===n)?.category||'غير مصنف';
     if(!grouped[cat]) grouped[cat]=[];
     grouped[cat].push(n);
   });
-
-  // Build all rows with direct links
   let html='';
-  const opens = circ.linkOpened || {};
   for(const [cat,members] of Object.entries(grouped)){
     html+=`<div style="margin-bottom:14px">
       <div style="font-weight:800;font-size:12px;color:var(--primary);background:#e8f0fe;padding:5px 10px;border-radius:7px;margin-bottom:7px">🏷️ ${cat}</div>`;
@@ -518,10 +743,10 @@ async function openWa(circ){
       const link=staffLink(circ.id,n);
       const msg=`السلام عليكم ${n}،\nيرجى الاطلاع على التعميم التالي:\n\n📋 *${circ.title}*\n\n🔗 ${link}${circ.pdfUrl?'\n📎 يوجد ملف PDF داخل الرابط':''}`;
       const waUrl=`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
-      let openBadge = '';
-      if(ack){ openBadge = `<span class="badge bs2">✅ تم الاطلاع</span>`; }
-      else if(opened){ openBadge = `<span class="badge" style="background:#fff3cd;color:#8a6d00">👁️ فتح الرابط ولم يؤكد</span>`; }
-      else { openBadge = `<span class="badge bd2">⏳ لم يفتح الرابط</span>`; }
+      let openBadge;
+      if(ack) openBadge=`<span class="badge bs2">✅ تم الاطلاع</span>`;
+      else if(opened) openBadge=`<span class="badge" style="background:#fff3cd;color:#8a6d00">👁️ فتح ولم يؤكد</span>`;
+      else openBadge=`<span class="badge bd2">⏳ لم يفتح الرابط</span>`;
       html+=`<div class="wa-row">
         <div style="flex:1;min-width:0">
           <div style="font-weight:700;font-size:13px;margin-bottom:2px">👤 ${n}</div>
@@ -555,7 +780,6 @@ window.delCirc=async(id)=>{
   unload(); renderCircs();
 };
 
-// ── CHIPS ──
 function renderChips(){
   const pEl=document.getElementById('chipFilter');
   pEl.innerHTML=`<button class="pill ${chipFilter==='all'?'on':''}" onclick="setChipFilter('all')">🌐 الكل</button>`+
@@ -586,12 +810,10 @@ window.deselAll=()=>document.querySelectorAll('#chipsArea .chip').forEach(c=>c.c
 window.selCat=(cat)=>document.querySelectorAll(`#chipsArea .chip[data-cat="${cat}"]`).forEach(c=>c.classList.add('on'));
 window.deselCat=(cat)=>document.querySelectorAll(`#chipsArea .chip[data-cat="${cat}"]`).forEach(c=>c.classList.remove('on'));
 
-// ── STAFF ──
 window.toggleNewCat=()=>{
   const el=document.getElementById('newCatBox');
   el.style.display=el.style.display==='none'?'block':'none';
 };
-
 window.doAddCatQuick=async()=>{
   const name=document.getElementById('newCatName').value.trim();
   if(!name){ alert('أدخل اسم التصنيف'); return; }
@@ -602,9 +824,7 @@ window.doAddCatQuick=async()=>{
   cats.sort((a,b)=>a.name.localeCompare(b.name,'ar'));
   document.getElementById('newCatName').value='';
   document.getElementById('newCatBox').style.display='none';
-  unload();
-  renderStaff();
-  renderCats();
+  unload(); renderStaff(); renderCats();
   alert('✅ تم إضافة التصنيف: '+name);
 };
 
@@ -665,7 +885,6 @@ function renderStaff(){
 }
 window.setSfFilter=(f)=>{ sfFilter=f; renderStaff(); };
 
-// ── CATEGORIES ──
 window.doAddCat=async()=>{
   const name=document.getElementById('catName').value.trim();
   if(!name){ alert('أدخل اسم التصنيف'); return; }
@@ -700,7 +919,6 @@ function renderCats(){
     </div>`).join('');
 }
 
-// ── CIRCULARS ──
 function renderCircs(){
   const el=document.getElementById('circsList');
   if(!circs.length){ el.innerHTML='<div class="empty"><div class="ei">📭</div><p>لا توجد تعاميم بعد</p></div>'; return; }
@@ -733,7 +951,6 @@ function renderCircs(){
   }).join('');
 }
 
-// ── REPORTS ──
 function renderReports(){
   const el=document.getElementById('reportsList');
   if(!circs.length){ el.innerHTML='<div class="empty"><div class="ei">📊</div><p>لا توجد تعاميم</p></div>'; return; }
@@ -766,6 +983,339 @@ function renderReports(){
 }
 
 document.getElementById('cDate').value=new Date().toISOString().split('T')[0];
+
+/* =====================================================================
+   CALENDAR MODULE
+   ===================================================================== */
+
+async function loadCalData(){
+  load('جاري تحميل بيانات التقويم...');
+  try{
+    const ccSnap=await getDocs(collection(db,'cal_categories'));
+    calCats=ccSnap.docs.map(d=>({id:d.id,...d.data()}));
+    if(calCats.length===0){
+      for(const n of DEFAULT_CAL_CATS){
+        const r=await addDoc(collection(db,'cal_categories'),{name:n,createdAt:serverTimestamp()});
+        calCats.push({id:r.id,name:n});
+      }
+    }
+    calCats.sort((a,b)=>a.name.localeCompare(b.name,'ar'));
+    const [csSnap,evSnap]=await Promise.all([
+      getDocs(collection(db,'cal_staff')),
+      getDocs(collection(db,'events'))
+    ]);
+    calStaff=csSnap.docs.map(d=>({id:d.id,...d.data()}));
+    events=evSnap.docs.map(d=>({id:d.id,...d.data()}));
+    events.sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+  }catch(e){ console.error(e); }
+  unload();
+}
+
+window.goCalPage=(page,btn)=>{
+  document.querySelectorAll('#calWrap .pg').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('#calWrap .tbtn').forEach(b=>b.classList.remove('on','cal-on'));
+  document.getElementById('cpg-'+page).classList.add('on');
+  if(btn){ btn.classList.add('on'); btn.classList.add('cal-on'); }
+  if(page==='events')    renderEvents();
+  if(page==='addEvent')  { renderEvChips(); resetEventForm(); }
+  if(page==='calStaff')  renderCalStaff();
+  if(page==='calCats')   renderCalCats();
+};
+
+// ---- Event files (multi-upload) ----
+window.onEvFilePick=(inp)=>{
+  const files=[...inp.files];
+  files.forEach(f=>{
+    evFiles.push({file:f, name:f.name, size:(f.size/1024/1024).toFixed(2)+' MB', url:null});
+  });
+  inp.value='';
+  renderEvFilesPreview();
+};
+function renderEvFilesPreview(){
+  const el=document.getElementById('evFilesPreview');
+  el.innerHTML=evFiles.map((f,i)=>`
+    <div class="file-prev">
+      <span style="font-size:22px">${f.name.toLowerCase().endsWith('.pdf')?'📄':'📝'}</span>
+      <div style="flex:1"><div style="font-weight:600;font-size:13px">${f.name}</div><div style="font-size:11px;color:var(--muted)">${f.size}</div></div>
+      <button class="btn bd" onclick="removeEvFile(${i})">✕</button>
+    </div>`).join('');
+}
+window.removeEvFile=(i)=>{ evFiles.splice(i,1); renderEvFilesPreview(); };
+
+// ---- Event messages (multi-field) ----
+window.addMsgField=(value='')=>{
+  evMsgCount++;
+  const id=`msg_${evMsgCount}`;
+  const el=document.getElementById('evMsgsArea');
+  const div=document.createElement('div');
+  div.style.marginBottom='10px';
+  div.innerHTML=`
+    <div style="display:flex;gap:6px;align-items:flex-start">
+      <textarea id="${id}" placeholder="مثال: السلام عليكم، بمناسبة اليوم الوطني..." style="margin-bottom:0;flex:1">${value}</textarea>
+      <button class="btn bd" style="margin-top:0" onclick="this.parentElement.parentElement.remove()">✕</button>
+    </div>`;
+  el.appendChild(div);
+};
+
+function resetEventForm(){
+  document.getElementById('evTitle').value='';
+  document.getElementById('evDate').value='';
+  document.getElementById('evNotes').value='';
+  document.getElementById('evFileInput').value='';
+  evFiles=[];
+  renderEvFilesPreview();
+  document.getElementById('evMsgsArea').innerHTML='';
+  evMsgCount=0;
+}
+
+window.evSelAll=()=>document.querySelectorAll('#evChipsArea .chip').forEach(c=>c.classList.add('on'));
+window.evDeselAll=()=>document.querySelectorAll('#evChipsArea .chip').forEach(c=>c.classList.remove('on'));
+window.evSelCat=(cat)=>document.querySelectorAll(`#evChipsArea .chip[data-cat="${cat}"]`).forEach(c=>c.classList.add('on'));
+window.evDeselCat=(cat)=>document.querySelectorAll(`#evChipsArea .chip[data-cat="${cat}"]`).forEach(c=>c.classList.remove('on'));
+window.setEvChipFilter=(f)=>{ evChipFilter=f; renderEvChips(); };
+
+function renderEvChips(){
+  const pEl=document.getElementById('evChipFilter');
+  pEl.innerHTML=`<button class="pill ${evChipFilter==='all'?'on cal-pill':''}" onclick="setEvChipFilter('all')">🌐 الكل</button>`+
+    calCats.map(c=>{
+      const n=calStaff.filter(s=>s.category===c.name).length;
+      return n?`<button class="pill ${evChipFilter===c.name?'on cal-pill':''}" onclick="setEvChipFilter('${c.name}')">${c.name} (${n})</button>`:'';
+    }).join('');
+  const aEl=document.getElementById('evChipsArea');
+  const filtered=evChipFilter==='all'?calStaff:calStaff.filter(s=>s.category===evChipFilter);
+  if(!filtered.length){ aEl.innerHTML='<p style="color:#aaa;font-size:13px;margin-bottom:10px">لا يوجد أشخاص في هذا التصنيف</p>'; return; }
+  const grouped={};
+  filtered.forEach(s=>{ const c=s.category||'غير مصنف'; if(!grouped[c]) grouped[c]=[]; grouped[c].push(s); });
+  aEl.innerHTML=Object.entries(grouped).map(([cat,members])=>`
+    <div style="margin-bottom:12px">
+      <div class="cat-hdr cal-cat">
+        <span>🏷️ ${cat}</span>
+        <div style="display:flex;gap:5px">
+          <button style="background:var(--cal);color:#fff" onclick="evSelCat('${cat}')">تحديد الكل</button>
+          <button style="background:#aaa;color:#fff" onclick="evDeselCat('${cat}')">إلغاء الكل</button>
+        </div>
+      </div>
+      <div class="chips">${members.map(s=>`<div class="chip cal-chip" data-name="${s.name}" data-cat="${cat}" onclick="this.classList.toggle('on')">${s.name}</div>`).join('')}</div>
+    </div>`).join('');
+}
+
+window.doSaveEvent=async()=>{
+  const title=document.getElementById('evTitle').value.trim();
+  const dateVal=document.getElementById('evDate').value;
+  const notes=document.getElementById('evNotes').value.trim();
+  const sel=[...document.querySelectorAll('#evChipsArea .chip.on')].map(c=>c.dataset.name);
+  if(!title){ alert('أدخل عنوان المناسبة'); return; }
+  if(!dateVal){ alert('أدخل تاريخ المناسبة'); return; }
+
+  // upload files
+  let fileUrls=[];
+  if(evFiles.length){
+    load('جاري رفع المرفقات...');
+    for(const f of evFiles){
+      try{
+        const url=await uploadFileToCloudinary(f.file);
+        fileUrls.push({name:f.name, url});
+      }catch(e){ console.error('file upload failed', e); }
+    }
+  }
+  // collect messages
+  const msgEls=[...document.querySelectorAll('#evMsgsArea textarea')];
+  const messages=msgEls.map(t=>t.value.trim()).filter(v=>v);
+
+  load('جاري الحفظ...');
+  const ev={
+    title, date:dateVal, notes,
+    responsible:sel,
+    files:fileUrls,
+    messages,
+    createdAt:serverTimestamp()
+  };
+  const ref=await addDoc(collection(db,'events'),ev);
+  ev.id=ref.id;
+  events.push(ev);
+  events.sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+  unload();
+  resetEventForm();
+  alert('✅ تم حفظ المناسبة بنجاح');
+  goCalPage('events', document.querySelector('#calWrap .tbtn'));
+};
+
+window.delEvent=async(id)=>{
+  if(!confirm('حذف هذه المناسبة نهائياً؟')) return;
+  load('جاري الحذف...');
+  await deleteDoc(doc(db,'events',id));
+  events=events.filter(e=>e.id!==id);
+  unload();
+  renderEvents();
+  document.getElementById('eventModal').classList.remove('on');
+};
+
+window.setEventFilterMode=(mode)=>{ eventFilterMode=mode; renderEvents(); };
+
+function renderEvents(){
+  const pEl=document.getElementById('eventFilterPills');
+  pEl.innerHTML=`
+    <button class="pill ${eventFilterMode==='upcoming'?'on cal-pill':''}" onclick="setEventFilterMode('upcoming')">🔜 القادمة</button>
+    <button class="pill ${eventFilterMode==='past'?'on cal-pill':''}" onclick="setEventFilterMode('past')">📜 السابقة</button>
+    <button class="pill ${eventFilterMode==='all'?'on cal-pill':''}" onclick="setEventFilterMode('all')">🌐 الكل</button>`;
+
+  const el=document.getElementById('eventsList');
+  const today=new Date().toISOString().split('T')[0];
+  let list=events;
+  if(eventFilterMode==='upcoming') list=events.filter(e=>e.date>=today);
+  if(eventFilterMode==='past') list=events.filter(e=>e.date<today).reverse();
+
+  if(!list.length){ el.innerHTML='<div class="empty"><div class="ei">📅</div><p>لا توجد مناسبات</p></div>'; return; }
+
+  el.innerHTML=list.map(ev=>{
+    const isPast=ev.date<today;
+    const d=new Date(ev.date+'T00:00:00');
+    const dateStr=d.toLocaleDateString('ar-SA',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+    return `<div class="event-card ${isPast?'past':''}" onclick="openEventModal('${ev.id}')">
+      <div class="event-date-badge">📅 ${dateStr}</div>
+      <div class="event-title">${ev.title}</div>
+      <div class="event-resp">${(ev.responsible||[]).slice(0,4).map(r=>`<span class="event-resp-tag">👤 ${r}</span>`).join('')}${(ev.responsible||[]).length>4?`<span class="event-resp-tag">+${ev.responsible.length-4}</span>`:''}</div>
+      ${ev.files&&ev.files.length?`<div style="font-size:12px;color:var(--cal);font-weight:600">📎 ${ev.files.length} مرفق</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+window.openEventModal=(id)=>{
+  const ev=events.find(e=>e.id===id);
+  if(!ev) return;
+  const d=new Date(ev.date+'T00:00:00');
+  const dateStr=d.toLocaleDateString('ar-SA',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const filesHtml=(ev.files||[]).map(f=>`<a href="${f.url}" target="_blank" class="event-file-chip">${f.name.toLowerCase().endsWith('.pdf')?'📄':'📝'} ${f.name}</a>`).join('');
+  const msgsHtml=(ev.messages||[]).map((m,i)=>`
+    <div class="event-msg-box">
+      ${m}
+      <br><button class="event-msg-copybtn" onclick="copyMsg(this,${i},'${ev.id}')">📋 نسخ الرسالة</button>
+    </div>`).join('');
+
+  document.getElementById('eventModalBody').innerHTML=`
+    <h3 class="cal-h">📅 ${ev.title}</h3>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:14px">${dateStr}</div>
+    ${ev.notes?`<div class="event-notes">${ev.notes}</div>`:''}
+    ${(ev.responsible||[]).length?`<div style="margin-bottom:13px"><label>المسؤولون</label><div class="event-resp">${ev.responsible.map(r=>`<span class="event-resp-tag">👤 ${r}</span>`).join('')}</div></div>`:''}
+    ${filesHtml?`<div style="margin-bottom:13px"><label>المرفقات</label><div class="event-files">${filesHtml}</div></div>`:''}
+    ${msgsHtml?`<div style="margin-bottom:13px"><label>رسائل جاهزة للجروبات</label>${msgsHtml}</div>`:''}
+    <div class="event-actions">
+      <button class="btn bd bf" onclick="delEvent('${ev.id}')">🗑️ حذف المناسبة</button>
+    </div>
+    <button class="btn bo bf" style="margin-top:8px" onclick="document.getElementById('eventModal').classList.remove('on')">إغلاق</button>
+  `;
+  document.getElementById('eventModal').classList.add('on');
+};
+
+window.copyMsg=(btn,idx,evId)=>{
+  const ev=events.find(e=>e.id===evId);
+  const text=ev.messages[idx];
+  navigator.clipboard.writeText(text).then(()=>{
+    const old=btn.textContent;
+    btn.textContent='✅ تم النسخ!';
+    setTimeout(()=>{ btn.textContent=old; },1500);
+  }).catch(()=>{ alert('تعذر النسخ، انسخ الرسالة يدوياً'); });
+};
+
+// ---- Calendar staff & categories ----
+window.toggleNewCalCat=()=>{
+  const el=document.getElementById('newCalCatBox');
+  el.style.display=el.style.display==='none'?'block':'none';
+};
+window.doAddCalCatQuick=async()=>{
+  const name=document.getElementById('newCalCatName').value.trim();
+  if(!name){ alert('أدخل اسم التصنيف'); return; }
+  if(calCats.find(c=>c.name===name)){ alert('التصنيف موجود مسبقاً'); return; }
+  load('جاري الإضافة...');
+  const ref=await addDoc(collection(db,'cal_categories'),{name,createdAt:serverTimestamp()});
+  calCats.push({id:ref.id,name});
+  calCats.sort((a,b)=>a.name.localeCompare(b.name,'ar'));
+  document.getElementById('newCalCatName').value='';
+  document.getElementById('newCalCatBox').style.display='none';
+  unload(); renderCalStaff(); renderCalCats();
+  alert('✅ تم إضافة التصنيف: '+name);
+};
+
+window.doAddCalStaff=async()=>{
+  const name=document.getElementById('csName').value.trim();
+  const cat=document.getElementById('csCat').value;
+  if(!name){ alert('أدخل الاسم'); return; }
+  if(!cat){ alert('اختر التصنيف'); return; }
+  if(calStaff.find(s=>s.name===name)){ alert('الاسم موجود مسبقاً'); return; }
+  load('جاري الإضافة...');
+  const ref=await addDoc(collection(db,'cal_staff'),{name,category:cat,createdAt:serverTimestamp()});
+  calStaff.push({id:ref.id,name,category:cat});
+  document.getElementById('csName').value='';
+  document.getElementById('csCat').value='';
+  unload(); renderCalStaff();
+};
+
+window.delCalStaff=async(id,name)=>{
+  if(!confirm(`حذف "${name}"؟`)) return;
+  load('جاري الحذف...');
+  await deleteDoc(doc(db,'cal_staff',id));
+  calStaff=calStaff.filter(s=>s.id!==id);
+  unload(); renderCalStaff();
+};
+
+window.setCalSfFilter=(f)=>{ calSfFilter=f; renderCalStaff(); };
+
+function renderCalStaff(){
+  const sel=document.getElementById('csCat');
+  sel.innerHTML='<option value="">-- اختر التصنيف --</option>'+calCats.map(c=>`<option value="${c.name}">${c.name}</option>`).join('');
+  const fEl=document.getElementById('calStaffFilter');
+  fEl.innerHTML=`<button class="pill ${calSfFilter==='all'?'on cal-pill':''}" onclick="setCalSfFilter('all')">الكل (${calStaff.length})</button>`+
+    calCats.map(c=>{ const n=calStaff.filter(s=>s.category===c.name).length; return n?`<button class="pill ${calSfFilter===c.name?'on cal-pill':''}" onclick="setCalSfFilter('${c.name}')">${c.name} (${n})</button>`:''; }).join('');
+  const el=document.getElementById('calStaffList');
+  const filtered=calSfFilter==='all'?calStaff:calStaff.filter(s=>s.category===calSfFilter);
+  if(!filtered.length){ el.innerHTML='<p style="color:#aaa;font-size:13px">لا يوجد أشخاص</p>'; return; }
+  const grouped={};
+  filtered.forEach(s=>{ const c=s.category||'غير مصنف'; if(!grouped[c]) grouped[c]=[]; grouped[c].push(s); });
+  el.innerHTML=Object.entries(grouped).map(([cat,members])=>`
+    <div style="margin-bottom:14px">
+      <div class="cat-hdr cal-cat"><span>🏷️ ${cat}</span></div>
+      ${members.map(s=>`<div class="scard">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span style="font-weight:700;font-size:14px">👤 ${s.name}</span>
+          <button class="btn bd" onclick="delCalStaff('${s.id}','${s.name}')">حذف</button>
+        </div>
+      </div>`).join('')}
+    </div>`).join('');
+}
+
+window.doAddCalCat=async()=>{
+  const name=document.getElementById('calCatName').value.trim();
+  if(!name){ alert('أدخل اسم التصنيف'); return; }
+  if(calCats.find(c=>c.name===name)){ alert('التصنيف موجود مسبقاً'); return; }
+  load('جاري الإضافة...');
+  const ref=await addDoc(collection(db,'cal_categories'),{name,createdAt:serverTimestamp()});
+  calCats.push({id:ref.id,name});
+  calCats.sort((a,b)=>a.name.localeCompare(b.name,'ar'));
+  document.getElementById('calCatName').value='';
+  unload(); renderCalCats(); renderCalStaff();
+};
+
+window.delCalCat=async(id,name)=>{
+  if(calStaff.some(s=>s.category===name)){ alert(`لا يمكن حذف "${name}" لأن هناك أشخاص مصنفون تحته`); return; }
+  if(!confirm(`حذف "${name}"؟`)) return;
+  load('جاري الحذف...');
+  await deleteDoc(doc(db,'cal_categories',id));
+  calCats=calCats.filter(c=>c.id!==id);
+  unload(); renderCalCats();
+};
+
+function renderCalCats(){
+  const el=document.getElementById('calCatsList');
+  if(!calCats.length){ el.innerHTML='<p style="color:#aaa;font-size:13px">لا توجد تصنيفات</p>'; return; }
+  el.innerHTML=calCats.map(c=>`
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 13px;background:#f8fafc;border-radius:9px;margin-bottom:7px;border:1px solid var(--border)">
+      <span style="font-weight:600;font-size:14px">🏷️ ${c.name}</span>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:12px;color:var(--muted)">${calStaff.filter(s=>s.category===c.name).length} شخص</span>
+        <button class="btn bd" onclick="delCalCat('${c.id}','${c.name}')">حذف</button>
+      </div>
+    </div>`).join('');
+}
 </script>
 </body>
 </html>
